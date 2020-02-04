@@ -1,4 +1,4 @@
-package com.railroad.producers;
+package com.railroad.common.producers;
 
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
