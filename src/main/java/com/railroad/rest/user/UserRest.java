@@ -7,10 +7,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import com.railroad.common.annotation.Log;
+
 import java.awt.*;
 import java.util.Collection;
 
-@Path("user")
+@Path("/users")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class UserRest {
@@ -18,7 +21,8 @@ public class UserRest {
     @Inject
     UserService userService;
 
-    @Path("all")
+    @Path("/")
+    @Log
     @GET
     public Response getUsers(){
         Collection<?> users = userService.getUsers();
