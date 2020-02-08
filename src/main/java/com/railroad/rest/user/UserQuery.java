@@ -18,7 +18,6 @@ public class UserQuery {
     }
 
     public User createUser(User user){
-        
         if(user.getId() == null){
             entityManager.persist(user);
             return user;
@@ -32,8 +31,7 @@ public class UserQuery {
         return user;
     }
     
-    public User getUserById(Long id){
+    public User findUserById(Long id){
         return entityManager.find(User.class, id);
     }
-
 }
