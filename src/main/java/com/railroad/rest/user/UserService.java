@@ -4,6 +4,8 @@ import com.railroad.entity.User;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
 
 import java.util.Collection;
@@ -17,12 +19,16 @@ public class UserService {
         return query.getUsers();
     }
     
-    public User createUser(User user) {
-    	if(user.getId() == null) {
-    		return query.createUser(user);
-    	}
-    	
-    	return user;
+    public User createUser(User user) throws ConstraintViolationException {
+        try {
+            if (user.getId() == null) {
+                return query.createUser(user);
+            }
+
+            return user;
+        }catch(ConstraintViolationException e){
+            throw e;
+        }
     }
 
 	public User findUserById(@NotNull Long id) {

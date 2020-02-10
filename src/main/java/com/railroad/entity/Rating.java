@@ -1,32 +1,31 @@
 package com.railroad.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 
-@Entity
-@Table(name = "S_RATING")
+@Entity(name = "S_RATING")
 public class Rating extends AbstractEntity {
-    @NotNull(message = "rating cannot be null")
-    private double rating;
+    @DecimalMin(value = "0.00", message = "rating should be more than zero")
+    @DecimalMin(value = "5.00", message = "rating should be less than 5.0")
+    private double rateValue;
 
     @Size(min = 1, max = 280, message = "Character count should be between 1 and 280")
     @NotEmpty(message = "please leave a comment")
     private String comment;
 
-    @ManyToMany(mappedBy = "ratings")
-    private Collection<User> users;
+    @OneToMany(mappedBy = "rating")
+    private Collection<UserRating> userRatings;
 
-    public double getRating() {
-        return rating;
+    public double getRateValue() {
+        return rateValue;
     }
 
-    public void setRating(double rating) {
-        this.rating = rating;
+    public void setRateValue(double rateValue) {
+        this.rateValue = rateValue;
     }
 
     public String getComment() {
@@ -37,11 +36,11 @@ public class Rating extends AbstractEntity {
         this.comment = comment;
     }
 
-    public Collection<User> getUsers() {
-        return users;
+    public Collection<UserRating> getUserRatings() {
+        return userRatings;
     }
 
-    public void setUsers(Collection<User> users) {
-        this.users = users;
+    public void setUserRatings(Collection<UserRating> userRatings) {
+        this.userRatings = userRatings;
     }
 }

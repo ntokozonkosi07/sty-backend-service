@@ -21,7 +21,7 @@ public class Requirement extends AbstractEntity {
     private double price;
 
     @ManyToMany(mappedBy = "requirements")
-    private Collection<Service> services;
+    private Collection<ServiceUtility> services;
 
     public String getName() {
         return name;
@@ -47,11 +47,11 @@ public class Requirement extends AbstractEntity {
         this.price = price;
     }
 
-    public Collection<Service> getServices() {
+    public Collection<ServiceUtility> getServices() {
         return services;
     }
 
-    public void setServices(Collection<Service> services) {
+    public void setServices(Collection<ServiceUtility> services) {
         this.services = services;
     }
 }

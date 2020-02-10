@@ -8,11 +8,9 @@ import java.io.Serializable;
 
 @MappedSuperclass
 public class AbstractEntity implements Serializable {
-
-	private static final long serialVersionUID = 1L;
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
     public Long getId() {

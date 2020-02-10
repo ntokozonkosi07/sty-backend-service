@@ -6,7 +6,7 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "S_SERVICE")
-public class Service extends AbstractEntity {
+public class ServiceUtility extends AbstractEntity {
     @NotEmpty(message = "name cannot be empty")
     private String name;
 
@@ -18,11 +18,11 @@ public class Service extends AbstractEntity {
     )
     private Collection<Requirement> requirements;
 
-    @ManyToMany(mappedBy = "services")
+    @ManyToMany(mappedBy = "serviceUtilities")
     private Collection<Artist> artists;
 
     private double price;
 
-    @OneToOne(mappedBy = "service")
+    @OneToOne(mappedBy = "serviceUtility")
     private Reservation reservation;
 }

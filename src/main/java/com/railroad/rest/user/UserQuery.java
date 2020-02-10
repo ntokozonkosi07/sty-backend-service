@@ -5,9 +5,12 @@ import com.railroad.entity.User;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
+
 import java.util.Collection;
 
-@Stateless
+@Transactional
 public class UserQuery {
     @Inject
     EntityManager entityManager;
@@ -17,7 +20,7 @@ public class UserQuery {
                 .getResultList();
     }
 
-    public User createUser(User user){
+    public User createUser(User user) throws ConstraintViolationException {
         if(user.getId() == null){
             entityManager.persist(user);
             return user;

@@ -14,17 +14,17 @@ public class Artist extends User {
             joinColumns = @JoinColumn(name = "ARTIST_ID"),
             inverseJoinColumns = @JoinColumn(name = "SERVICE_ID")
     )
-    private Collection<Service> services;
+    private Collection<ServiceUtility> serviceUtilities;
 
-    @OneToMany
+    @OneToMany(mappedBy = "artist")
     private Collection<Reservation> reservations;
 
-    public Collection<Service> getServices() {
-        return services;
+    public Collection<ServiceUtility> getServiceUtilities() {
+        return serviceUtilities;
     }
 
-    public void setServices(Collection<Service> services) {
-        this.services = services;
+    public void setServiceUtilities(Collection<ServiceUtility> serviceUtilities) {
+        this.serviceUtilities = serviceUtilities;
     }
 
     public Collection<Reservation> getReservations() {

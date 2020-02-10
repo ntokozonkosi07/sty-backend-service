@@ -21,7 +21,7 @@
     </dependencyManagement>
 
     <build>
-        <finalName>sleek</finalName>
+        <finalName>style-beat</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

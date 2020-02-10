@@ -6,7 +6,7 @@ import java.util.Collection;
 
 @Entity(name = "S_CLIENT")
 public class Client extends User {
-    @OneToMany
+    @OneToMany(mappedBy = "client")
     private Collection<Reservation> reservations;
 
     public Collection<Reservation> getReservations() {

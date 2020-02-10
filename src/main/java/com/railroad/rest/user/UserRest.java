@@ -1,6 +1,10 @@
 package com.railroad.rest.user;
 
 import javax.inject.Inject;
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
+import javax.json.bind.JsonbConfig;
+import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -13,6 +17,7 @@ import javax.ws.rs.core.Response;
 
 import com.railroad.common.annotation.Log;
 import com.railroad.entity.User;
+import com.railroad.entity.adapters.EntityAdapter;
 
 import java.util.Collection;
 
@@ -28,17 +33,35 @@ public class UserRest {
     @Log
     @GET
     public Response getUsers(){
+        JsonbConfig config = new JsonbConfig().withAdapters(new EntityAdapter() {
+            @Override
+            public Object adaptToJson(Object obj) throws Exception {
+                ((User)obj).setReservation(null);
+                ((User)obj).setUserRatings(null);
+                return obj;
+            }
+            @Override
+            public Object adaptFromJson(Object obj) throws Exception {
+                return null;
+            }
+        });
+        Jsonb jsonb = JsonbBuilder.create(config);
+
         Collection<?> users = userService.getUsers();
-        return Response.ok(users).build();
+
+        return Response.ok(jsonb.toJson(users)).build();
     }
     
     @Path("/")
     @Log
     @POST
-    public Response saveUser(@NotNull User user) {
-    	User newUser = userService.createUser(user);
-    	
-    	return Response.ok(newUser).build();
+    public Response saveUser(@NotNull User user) throws ConstraintViolationException {
+        try {
+            User newUser = userService.createUser(user);
+            return Response.ok(newUser).build();
+        } catch (Exception e){
+            throw e;
+        }
     }
     
     @Path("/{query}")

@@ -7,12 +7,15 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "S_RESERVATION")
 public class Reservation extends AbstractEntity {
+    @EmbeddedId
+    private ReservationKey id;
+
     @ManyToOne
-    @JoinColumn(name = "client_id")
+    @MapsId("clientId")
     private Client client;
 
     @ManyToOne
-    @JoinColumn(name = "artist_id")
+    @MapsId("artistId")
     private Artist artist;
 
     @NotNull
@@ -25,7 +28,7 @@ public class Reservation extends AbstractEntity {
 
     @OneToOne
     @JoinColumn(name = "Service_Id")
-    private Service service;
+    private ServiceUtility serviceUtility;
 
     @PrePersist
     public void init(){
@@ -70,5 +73,13 @@ public class Reservation extends AbstractEntity {
 
     public void setStatus(ReservationState status) {
         this.status = status;
+    }
+
+    public ServiceUtility getServiceUtility() {
+        return serviceUtility;
+    }
+
+    public void setServiceUtility(ServiceUtility serviceUtility) {
+        this.serviceUtility = serviceUtility;
     }
 }

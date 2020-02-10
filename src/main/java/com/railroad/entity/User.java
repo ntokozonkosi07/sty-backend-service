@@ -1,8 +1,12 @@
 package com.railroad.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "S_USER")
@@ -10,7 +14,11 @@ import java.util.Collection;
 @NamedQuery(name=User.FIND_USER_BY_ID, query = "select u from User u where u.Id = :id")
 public class User extends AbstractEntity {
 
-    public static final String FIND_ALL_USERS = "user.findAllUsers";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public static final String FIND_ALL_USERS = "user.findAllUsers";
     public static final String FIND_USER_BY_ID = "user.findUserById";
 
     @NotEmpty(message = "cannot leave name empty")
@@ -19,19 +27,20 @@ public class User extends AbstractEntity {
     @NotEmpty(message = "lastName cannot be empty")
     private String lastName;
 
+    @Email
+    @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "malformed email address")
+    @NotNull(message = "email cannot be null")
+    @Column(unique = true)
+    private String email;
+
     @Lob
     @Basic(fetch = FetchType.LAZY)
     private byte[] picture;
 
-    @ManyToMany
-    @JoinTable(
-            name = "s_user_rating",
-            joinColumns = @JoinColumn(name = "USER_ID"),
-            inverseJoinColumns = @JoinColumn(name = "RATING_ID")
-    )
-    private Collection<Rating> ratings;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Collection<UserRating> userRatings;
 
-    @OneToMany
+    @OneToMany(mappedBy = "artist", fetch = FetchType.EAGER)
     private Collection<Reservation> reservation;
 
     public String getName() {
@@ -50,6 +59,14 @@ public class User extends AbstractEntity {
         this.lastName = lastName;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public byte[] getPicture() {
         return picture;
     }
@@ -58,12 +75,12 @@ public class User extends AbstractEntity {
         this.picture = picture;
     }
 
-    public Collection<Rating> getRatings() {
-        return ratings;
+    public Collection<UserRating> getUserRatings() {
+        return userRatings;
     }
 
-    public void setRatings(Collection<Rating> ratings) {
-        this.ratings = ratings;
+    public void setUserRatings(Collection<UserRating> userRatings) {
+        this.userRatings = userRatings;
     }
 
     public Collection<Reservation> getReservation() {
