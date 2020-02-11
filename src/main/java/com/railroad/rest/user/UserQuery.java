@@ -35,6 +35,8 @@ public class UserQuery {
     }
     
     public User findUserById(Long id){
-        return entityManager.find(User.class, id);
+        return entityManager.createNamedQuery(User.FIND_USER_BY_ID, User.class)
+                .setParameter("id", id)
+                .getSingleResult();
     }
 }

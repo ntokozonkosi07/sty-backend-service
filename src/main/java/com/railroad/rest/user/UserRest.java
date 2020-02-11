@@ -69,7 +69,7 @@ public class UserRest {
     	return Response.ok().build();
     }
     
-    @Path("/{id}")
+    @Path("/{id}") @GET @Log
     public Response findUserById(@NotNull @PathParam("id") Long id) {
     	User user = userService.findUserById(id);
     	return Response.ok(user).build();
