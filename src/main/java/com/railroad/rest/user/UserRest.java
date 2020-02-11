@@ -7,12 +7,7 @@ import javax.json.bind.JsonbConfig;
 import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -73,5 +68,11 @@ public class UserRest {
     public Response findUserById(@NotNull @PathParam("id") Long id) {
     	User user = userService.findUserById(id);
     	return Response.ok(user).build();
+    }
+
+    @Path("/") @PUT @Log
+    public Response updateUser(@NotNull User user){
+        User _user = userService.updateUser(user);
+        return Response.ok(_user).build();
     }
 }

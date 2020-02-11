@@ -35,4 +35,8 @@ public class UserService {
 		
 		return query.findUserById(id);
 	}
+
+	public User updateUser(@NotNull User user){
+        return query.updateUser(user);
+    }
 }

@@ -1,10 +1,12 @@
 package com.railroad.rest.user;
 
 import com.railroad.entity.User;
+import com.railroad.rest.exception.UpdateException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
 
@@ -29,9 +31,16 @@ public class UserQuery {
         return user;
     }
     
-    public User updateUser(User user){
-        entityManager.merge(user);
-        return user;
+    public User updateUser(User user) throws UpdateException {
+        try {
+            // if finduserById throws a NoResultException means the user is not found
+            this.findUserById(user.getId());
+
+            User _user = entityManager.merge(user);
+            return _user;
+        } catch(NoResultException e){
+            throw new UpdateException("User could not be updated!");
+        }
     }
     
     public User findUserById(Long id){
