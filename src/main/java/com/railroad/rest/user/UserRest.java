@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
+import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
@@ -55,13 +56,9 @@ public class UserRest {
     @Path("/")
     @Log
     @POST
-    public Response saveUser(@NotNull User user) throws ConstraintViolationException {
-        try {
-            User newUser = userService.createUser(user);
-            return Response.ok(newUser).build();
-        } catch (Exception e){
-            throw e;
-        }
+    public Response saveUser(@NotNull User user) {
+        User newUser = userService.createUser(user);
+        return Response.ok(newUser).build();
     }
     
     @Path("/{query}")
