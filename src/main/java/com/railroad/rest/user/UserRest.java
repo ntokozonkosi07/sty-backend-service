@@ -14,6 +14,8 @@ import javax.ws.rs.core.Response;
 import com.railroad.common.annotation.Log;
 import com.railroad.entity.User;
 import com.railroad.entity.adapters.EntityAdapter;
+import com.railroad.rest.exception.UpdateException;
+import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
 
 import java.util.Collection;
 
@@ -25,9 +27,7 @@ public class UserRest {
     @Inject
     UserService userService;
 
-    @Path("/")
-    @Log
-    @GET
+    @Path("/") @Log @GET
     public Response getUsers(){
         JsonbConfig config = new JsonbConfig().withAdapters(new EntityAdapter() {
             @Override
@@ -48,17 +48,13 @@ public class UserRest {
         return Response.ok(jsonb.toJson(users)).build();
     }
     
-    @Path("/")
-    @Log
-    @POST
+    @Path("/") @Log @POST
     public Response saveUser(@NotNull User user) {
         User newUser = userService.createUser(user);
         return Response.ok(newUser).build();
     }
     
-    @Path("/{query}")
-    @POST
-    @Log
+    @Path("/{query}")  @POST @Log
     public Response searchUser(@NotNull @PathParam("query") String query) {
 //    	hook up elasticsearch here
     	return Response.ok().build();
@@ -71,7 +67,7 @@ public class UserRest {
     }
 
     @Path("/") @PUT @Log
-    public Response updateUser(@NotNull User user){
+    public Response updateUser(@NotNull User user) throws NoResultExceptionMapper {
         User _user = userService.updateUser(user);
         return Response.ok(_user).build();
     }

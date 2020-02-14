@@ -6,7 +6,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class NoResultExceptionMapper implements ExceptionMapper<NoResultException> {
+public class NoResultExceptionMapper extends Throwable implements ExceptionMapper<NoResultException> {
     @Override
     public Response toResponse(NoResultException exception) {
         return Response.status(Response.Status.NOT_FOUND).build();

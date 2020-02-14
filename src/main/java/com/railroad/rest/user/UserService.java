@@ -1,6 +1,8 @@
 package com.railroad.rest.user;
 
 import com.railroad.entity.User;
+import com.railroad.rest.exception.UpdateException;
+import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -36,7 +38,7 @@ public class UserService {
 		return query.findUserById(id);
 	}
 
-	public User updateUser(@NotNull User user){
+	public User updateUser(@NotNull User user) throws NoResultExceptionMapper {
         return query.updateUser(user);
     }
 }
