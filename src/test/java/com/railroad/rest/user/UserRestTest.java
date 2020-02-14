@@ -7,9 +7,12 @@ import com.railroad.configuration.config;
 import com.railroad.entity.User;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
 import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -17,15 +20,19 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.junit.InSequence;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -47,14 +54,15 @@ public class UserRestTest {
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
-    @Test
-    @RunAsClient
+    String url = "http://localhost:9999/style-beat/api/v1/users";
+
+    @Test @RunAsClient  @InSequence(1)
     public void get_list_of_users() throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
 
         try {
 
-            HttpGet request = new HttpGet("http://localhost:9999/style-beat/api/v1/users");
+            HttpGet request = new HttpGet(url);
 
             CloseableHttpResponse response = httpClient.execute(request);
 
@@ -85,5 +93,36 @@ public class UserRestTest {
         } finally {
             httpClient.close();
         }
+    }
+
+    @Test @RunAsClient @InSequence(2)
+    public void saveUser() throws IOException {
+
+        String result = "";
+        HttpPost post = new HttpPost(url);
+//        {
+//            "name": "Baleka",
+//                "lastName": "Mbethe",
+//                "email": "ntokozonkosi07@gmail.com"
+//        }
+
+        User user = new User();
+        user.setName("Baleka");
+        user.setLastName("Mbethe");
+        user.setEmail("baleka.mbethe@balekas.co.za");
+
+        Jsonb jsonb = JsonbBuilder.create();
+        String json = jsonb.toJson(user);
+
+
+        // send a JSON data
+        post.setEntity(new StringEntity(json.toString()));
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(post)) {
+
+            result = EntityUtils.toString(response.getEntity());
+        }
+
     }
 }
