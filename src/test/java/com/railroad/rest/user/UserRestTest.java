@@ -100,11 +100,6 @@ public class UserRestTest {
 
         String result = "";
         HttpPost post = new HttpPost(url);
-//        {
-//            "name": "Baleka",
-//                "lastName": "Mbethe",
-//                "email": "ntokozonkosi07@gmail.com"
-//        }
 
         User user = new User();
         user.setName("Baleka");
@@ -116,13 +111,22 @@ public class UserRestTest {
 
 
         // send a JSON data
-        post.setEntity(new StringEntity(json.toString()));
+        post.setEntity(new StringEntity(json));
+        post.setHeader("Accept", "application/json");
+        post.setHeader("Content-type", "application/json");
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(post)) {
 
             result = EntityUtils.toString(response.getEntity());
-        }
 
+        }
+        user.setId(1L);
+        User _usr = jsonb.fromJson(result, User.class);
+        assertEquals(_usr.getEmail(), user.getEmail());
+
+//        assertEquals(user, _usr);
+
+//        assertEquals(response.getStatusLine().getStatusCode(), 200);
     }
 }
