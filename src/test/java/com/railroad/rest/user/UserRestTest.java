@@ -13,6 +13,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -28,6 +29,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.json.JsonObject;
+import javax.json.JsonString;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
@@ -75,7 +77,7 @@ public class UserRestTest {
                     System.out.println(json);
                 }
 
-                assertEquals(response.getStatusLine().getStatusCode(), 200);
+                assertEquals(200, response.getStatusLine().getStatusCode());
                 assertEquals(json, "[]");
 
             } finally {
@@ -87,7 +89,7 @@ public class UserRestTest {
     }
 
     @Test @RunAsClient @InSequence(2)
-    public void saveUser() throws IOException {
+    public void save_user() throws IOException {
 
         String result = "";
         HttpPost post = new HttpPost(url);
@@ -148,9 +150,9 @@ public class UserRestTest {
                     public User adaptFromJson(JsonObject obj) throws Exception {
                         User user = new User();
                         user.setId(Long.parseLong(String.valueOf(obj.get("id")+"")));
-                        user.setLastName(String.valueOf(obj.get("lastName")));
-                        user.setName(String.valueOf(obj.get("name")));
-                        user.setEmail(String.valueOf(obj.get("email")));
+                        user.setLastName(((JsonString)obj.get("lastName")).getString());
+                        user.setName(((JsonString)obj.get("name")).getString());
+                        user.setEmail(((JsonString)obj.get("email")).getString());
                         user.setPicture(null);
                         user.setUserRatings((Collection<UserRating>)obj.get("userRatings"));
                         user.setReservation((Collection<Reservation>)obj.get("reservation"));
@@ -160,8 +162,9 @@ public class UserRestTest {
                 });
 
                 User _usr = JsonbBuilder.create(config).fromJson(json, User.class);
-//                assertEquals(_usr.getId(), 1L);
-                assertEquals(response.getStatusLine().getStatusCode(), 200);
+                assertEquals(_usr.getName(), "Baleka");
+                assertEquals(_usr.getLastName(), "Mbethe");
+                assertEquals(200,response.getStatusLine().getStatusCode());
 
             } catch(Exception e){
                 System.out.println(e.getLocalizedMessage());
@@ -173,6 +176,37 @@ public class UserRestTest {
         } finally {
             httpClient.close();
         }
+    }
+
+    @Test @RunAsClient @InSequence(4)
+    public void update_user() throws IOException {
+        String result = "";
+        HttpPut putReq = new HttpPut(url);
+
+        User user = new User();
+        user.setName("Baleka");
+        user.setLastName("Ndlela");
+        user.setEmail("baleka.dlela@balekas.co.za");
+
+        Jsonb jsonb = JsonbBuilder.create();
+        String json = jsonb.toJson(user);
+
+
+        // send a JSON data
+        putReq.setEntity(new StringEntity(json));
+        putReq.setHeader("Accept", "application/json");
+        putReq.setHeader("Content-type", "application/json");
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(putReq)) {
+
+            result = EntityUtils.toString(response.getEntity());
+
+        }
+
+        User _user = jsonb.fromJson(result, User.class);
+        assertEquals("baleka.dlela@balekas.co.za", _user.getEmail());
+        assertEquals("Ndlela", _user.getLastName());
     }
 
 }
