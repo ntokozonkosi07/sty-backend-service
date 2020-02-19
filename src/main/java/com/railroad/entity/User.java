@@ -1,5 +1,8 @@
 package com.railroad.entity;
 
+import javax.json.bind.annotation.JsonbCreator;
+import javax.json.bind.annotation.JsonbNillable;
+import javax.json.bind.annotation.JsonbProperty;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -35,13 +38,17 @@ public class User extends AbstractEntity {
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
+    @JsonbProperty(nillable=true)
     private byte[] picture;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @JsonbProperty(nillable=true)
     private Collection<UserRating> userRatings;
 
     @OneToMany(mappedBy = "artist", fetch = FetchType.EAGER)
+    @JsonbProperty(nillable=true)
     private Collection<Reservation> reservation;
+
 
     public String getName() {
         return name;

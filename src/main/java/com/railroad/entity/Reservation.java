@@ -30,6 +30,9 @@ public class Reservation extends AbstractEntity {
     @JoinColumn(name = "Service_Id")
     private ServiceUtility serviceUtility;
 
+    public Reservation() {
+    }
+
     @PrePersist
     public void init(){
         this.status = ReservationState.PENDING;

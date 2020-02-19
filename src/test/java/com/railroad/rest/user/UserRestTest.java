@@ -4,10 +4,13 @@ import com.railroad.common.entityAdapters.EntityAdapter;
 import com.railroad.common.filters.LoggingFilter;
 import com.railroad.common.producers.EntityManagerProducer;
 import com.railroad.configuration.config;
+import com.railroad.entity.Reservation;
 import com.railroad.entity.User;
+import com.railroad.entity.UserRating;
+import com.railroad.entity.adapters.CollectionAdapter;
+import com.railroad.entity.adapters.GenericCollectionAdapter;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
 import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -18,7 +21,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
-import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -27,12 +29,20 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.json.JsonArray;
+import javax.json.JsonObject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
+import javax.json.bind.JsonbConfig;
+import javax.json.bind.annotation.JsonbProperty;
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 
@@ -124,9 +134,64 @@ public class UserRestTest {
         user.setId(1L);
         User _usr = jsonb.fromJson(result, User.class);
         assertEquals(_usr.getEmail(), user.getEmail());
-
-//        assertEquals(user, _usr);
-
-//        assertEquals(response.getStatusLine().getStatusCode(), 200);
     }
+
+    @Test @RunAsClient  @InSequence(3)
+    public void get_user_by_id() throws IOException {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+
+        try {
+
+            HttpGet request = new HttpGet(url+"/1");
+
+            CloseableHttpResponse response = httpClient.execute(request);
+
+            try {      // HTTP/1.1 200 OK
+
+                HttpEntity entity = response.getEntity();
+                String json = null;
+                if (entity != null) {
+                    // return it as a String
+                    json = EntityUtils.toString(entity);
+                    System.out.println(json);
+                }
+
+                JsonbConfig config = new JsonbConfig().withAdapters(new EntityAdapter<User>() {
+
+                    @Override
+                    public JsonObject adaptToJson(User obj) throws Exception {
+                        return super.adaptToJson(obj);
+                    }
+
+                    @Override
+                    public User adaptFromJson(JsonObject obj) throws Exception {
+                        User user = new User();
+                        user.setId(Long.parseLong(String.valueOf(obj.get("id")+"")));
+                        user.setLastName(String.valueOf(obj.get("lastName")));
+                        user.setName(String.valueOf(obj.get("name")));
+                        user.setEmail(String.valueOf(obj.get("email")));
+                        user.setPicture(null);
+                        user.setUserRatings((Collection<UserRating>)obj.get("userRatings"));
+                        user.setReservation((Collection<Reservation>)obj.get("reservation"));
+
+                        return user;
+                    }
+                });
+
+                User _usr = JsonbBuilder.create(config).fromJson(json, User.class);
+//                assertEquals(_usr.getId(), 1L);
+                assertEquals(response.getStatusLine().getStatusCode(), 200);
+
+            } catch(Exception e){
+                System.out.println(e.getLocalizedMessage());
+            } finally {
+                response.close();
+            }
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } finally {
+            httpClient.close();
+        }
+    }
+
 }

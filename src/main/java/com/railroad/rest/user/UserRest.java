@@ -12,12 +12,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.railroad.common.annotation.Log;
+import com.railroad.entity.Reservation;
 import com.railroad.entity.User;
 import com.railroad.entity.adapters.EntityAdapter;
 import com.railroad.rest.exception.UpdateException;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Path("/users")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -55,11 +59,11 @@ public class UserRest {
     }
     
     @Path("/{query}")  @POST @Log
-    public Response searchUser(@NotNull @PathParam("query") String query) {
+    public Response searchUser(@NotNull @PathParam("query") String query) throws NotImplementedException {
 //    	hook up elasticsearch here
-    	return Response.ok().build();
+        throw new NotImplementedException();
     }
-    
+
     @Path("/{id}") @GET @Log
     public Response findUserById(@NotNull @PathParam("id") Long id) {
     	User user = userService.findUserById(id);
