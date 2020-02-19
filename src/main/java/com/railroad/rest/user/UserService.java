@@ -1,12 +1,10 @@
 package com.railroad.rest.user;
 
 import com.railroad.entity.User;
-import com.railroad.rest.exception.UpdateException;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
 
@@ -30,6 +28,8 @@ public class UserService {
             return user;
         }catch(ConstraintViolationException e){
             throw e;
+        }catch (Exception e){
+            throw e;
         }
     }
 
@@ -38,7 +38,7 @@ public class UserService {
 		return query.findUserById(id);
 	}
 
-	public User updateUser(@NotNull User user) throws NoResultExceptionMapper {
+	public User updateUser(@NotNull User user) {
         return query.updateUser(user);
     }
 }

@@ -1,10 +1,8 @@
 package com.railroad.rest.user;
 
 import com.railroad.entity.User;
-import com.railroad.rest.exception.UpdateException;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -32,15 +30,15 @@ public class UserQuery {
         return user;
     }
     
-    public User updateUser(User user) throws NoResultExceptionMapper {
+    public User updateUser(User user) throws NoResultException {
         try {
             // if finduserById throws a NoResultException means the user is not found
-            this.findUserById(user.getId());
+//            User user = this.findUserById(user.getId());
 
             User _user = entityManager.merge(user);
             return _user;
         } catch(NoResultException e){
-            throw new NoResultExceptionMapper();
+            throw new NoResultException();
         }
     }
     

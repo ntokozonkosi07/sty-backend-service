@@ -4,24 +4,20 @@ import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
-import javax.persistence.PersistenceException;
-import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.railroad.common.annotation.Log;
-import com.railroad.entity.Reservation;
 import com.railroad.entity.User;
 import com.railroad.entity.adapters.EntityAdapter;
-import com.railroad.rest.exception.UpdateException;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Path("/users")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -36,8 +32,10 @@ public class UserRest {
         JsonbConfig config = new JsonbConfig().withAdapters(new EntityAdapter() {
             @Override
             public Object adaptToJson(Object obj) throws Exception {
-                ((User)obj).setReservation(null);
-                ((User)obj).setUserRatings(null);
+                if( ((User)obj).getReservation() == null)
+                    ((User)obj).setReservation(new ArrayList<>());
+                if(((User)obj).getUserRatings() == null)
+                    ((User)obj).setUserRatings(new ArrayList<>());
                 return obj;
             }
             @Override
@@ -53,7 +51,7 @@ public class UserRest {
     }
     
     @Path("/") @Log @POST
-    public Response saveUser(@NotNull User user) {
+    public Response saveUser(@NotNull @Valid User user) {
         User newUser = userService.createUser(user);
         return Response.ok(newUser).build();
     }
@@ -71,7 +69,7 @@ public class UserRest {
     }
 
     @Path("/") @PUT @Log
-    public Response updateUser(@NotNull User user) throws NoResultExceptionMapper {
+    public Response updateUser(@NotNull @Valid User user) throws NoResultExceptionMapper {
         User _user = userService.updateUser(user);
         return Response.ok(_user).build();
     }

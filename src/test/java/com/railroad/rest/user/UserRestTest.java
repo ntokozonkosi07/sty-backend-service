@@ -7,8 +7,6 @@ import com.railroad.configuration.config;
 import com.railroad.entity.Reservation;
 import com.railroad.entity.User;
 import com.railroad.entity.UserRating;
-import com.railroad.entity.adapters.CollectionAdapter;
-import com.railroad.entity.adapters.GenericCollectionAdapter;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -29,19 +27,11 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
-import javax.json.bind.annotation.JsonbProperty;
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
@@ -68,9 +58,8 @@ public class UserRestTest {
 
     @Test @RunAsClient  @InSequence(1)
     public void get_list_of_users() throws IOException {
-        CloseableHttpClient httpClient = HttpClients.createDefault();
 
-        try {
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
 
             HttpGet request = new HttpGet(url);
 
@@ -100,8 +89,6 @@ public class UserRestTest {
             }
         } catch (ClientProtocolException e) {
             e.printStackTrace();
-        } finally {
-            httpClient.close();
         }
     }
 

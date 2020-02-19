@@ -1,5 +1,7 @@
 package com.railroad.entity;
 
+import com.railroad.entity.User;
+
 import javax.persistence.*;
 import java.util.Collection;
 
