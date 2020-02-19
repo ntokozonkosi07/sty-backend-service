@@ -19,6 +19,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Log
 @Path("/users")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -27,7 +28,7 @@ public class UserRest {
     @Inject
     UserService userService;
 
-    @Path("/") @Log @GET
+    @Path("/") @GET
     public Response getUsers(){
         JsonbConfig config = new JsonbConfig().withAdapters(new EntityAdapter() {
             @Override
@@ -50,25 +51,25 @@ public class UserRest {
         return Response.ok(jsonb.toJson(users)).build();
     }
     
-    @Path("/") @Log @POST
+    @Path("/") @POST
     public Response saveUser(@NotNull @Valid User user) {
         User newUser = userService.createUser(user);
         return Response.ok(newUser).build();
     }
     
-    @Path("/{query}")  @POST @Log
+    @Path("/{query}")  @POST
     public Response searchUser(@NotNull @PathParam("query") String query) throws NotImplementedException {
 //    	hook up elasticsearch here
         throw new NotImplementedException();
     }
 
-    @Path("/{id}") @GET @Log
+    @Path("/{id}") @GET
     public Response findUserById(@NotNull @PathParam("id") Long id) {
     	User user = userService.findUserById(id);
     	return Response.ok(user).build();
     }
 
-    @Path("/") @PUT @Log
+    @Path("/") @PUT
     public Response updateUser(@NotNull @Valid User user) throws NoResultExceptionMapper {
         User _user = userService.updateUser(user);
         return Response.ok(_user).build();
