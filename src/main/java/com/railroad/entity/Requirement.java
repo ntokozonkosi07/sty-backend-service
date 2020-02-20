@@ -1,5 +1,7 @@
 package com.railroad.entity;
 
+import com.railroad.entity.serviceProvided.ServiceProvided;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
@@ -21,7 +23,7 @@ public class Requirement extends AbstractEntity {
     private double price;
 
     @ManyToMany(mappedBy = "requirements")
-    private Collection<ServiceUtility> services;
+    private Collection<ServiceProvided> services;
 
     public String getName() {
         return name;
@@ -47,11 +49,11 @@ public class Requirement extends AbstractEntity {
         this.price = price;
     }
 
-    public Collection<ServiceUtility> getServices() {
+    public Collection<ServiceProvided> getServices() {
         return services;
     }
 
-    public void setServices(Collection<ServiceUtility> services) {
+    public void setServices(Collection<ServiceProvided> services) {
         this.services = services;
     }
 }

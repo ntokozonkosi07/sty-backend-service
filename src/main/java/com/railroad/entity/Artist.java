@@ -1,6 +1,6 @@
 package com.railroad.entity;
 
-import com.railroad.entity.User;
+import com.railroad.entity.serviceProvided.ServiceProvided;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -16,16 +16,16 @@ public class Artist extends User {
             joinColumns = @JoinColumn(name = "ARTIST_ID"),
             inverseJoinColumns = @JoinColumn(name = "SERVICE_ID")
     )
-    private Collection<ServiceUtility> serviceUtilities;
+    private Collection<ServiceProvided> serviceUtilities;
 
     @OneToMany(mappedBy = "artist")
     private Collection<Reservation> reservations;
 
-    public Collection<ServiceUtility> getServiceUtilities() {
+    public Collection<ServiceProvided> getServiceUtilities() {
         return serviceUtilities;
     }
 
-    public void setServiceUtilities(Collection<ServiceUtility> serviceUtilities) {
+    public void setServiceUtilities(Collection<ServiceProvided> serviceUtilities) {
         this.serviceUtilities = serviceUtilities;
     }
 

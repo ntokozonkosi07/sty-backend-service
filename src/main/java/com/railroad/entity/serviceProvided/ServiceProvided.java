@@ -1,4 +1,8 @@
-package com.railroad.entity;
+package com.railroad.entity.serviceProvided;
+
+import com.railroad.entity.AbstractEntity;
+import com.railroad.entity.Artist;
+import com.railroad.entity.Requirement;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -7,7 +11,7 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "S_SERVICE")
-public class ServiceUtility extends AbstractEntity {
+public class ServiceProvided extends AbstractEntity {
     @NotEmpty(message = "name cannot be empty")
     private String name;
 
