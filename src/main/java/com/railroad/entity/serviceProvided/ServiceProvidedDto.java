@@ -1,6 +1,6 @@
 package com.railroad.entity.serviceProvided;
 
-import com.railroad.entity.Requirement;
+import com.railroad.entity.requirement.Requirement;
 
 import java.util.Collection;
 

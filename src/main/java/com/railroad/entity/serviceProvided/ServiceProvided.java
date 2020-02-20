@@ -2,7 +2,7 @@ package com.railroad.entity.serviceProvided;
 
 import com.railroad.entity.AbstractEntity;
 import com.railroad.entity.Artist;
-import com.railroad.entity.Requirement;
+import com.railroad.entity.requirement.Requirement;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
