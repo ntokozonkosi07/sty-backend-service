@@ -1,9 +1,12 @@
-package com.railroad.entity;
+package com.railroad.entity.requirement;
 
+import com.railroad.entity.AbstractEntity;
+import com.railroad.entity.User;
 import com.railroad.entity.serviceProvided.ServiceProvided;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -11,7 +14,12 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "S_REQUIREMENT")
+@NamedQuery(name= Requirement.FIND_ALL_REQUIREMENTS, query = "select r from Requirement r ORDER BY r.Id")
+@NamedQuery(name= Requirement.FIND_REQUIREMENT_BY_ID, query = "select r from Requirement r where r.Id = :id")
 public class Requirement extends AbstractEntity {
+    public static final String FIND_ALL_REQUIREMENTS = "requirement.findAllRequirements";
+    public static final String FIND_REQUIREMENT_BY_ID = "requirement.findRequirementById";
+
     @NotEmpty(message = "name cannot be empty")
     private String name;
 
