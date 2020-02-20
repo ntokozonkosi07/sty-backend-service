@@ -3,6 +3,7 @@ package com.railroad.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Entity
 @Table(name = "S_RESERVATION")
@@ -26,9 +27,9 @@ public class Reservation extends AbstractEntity {
 
     private ReservationState status;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "Service_Id")
-    private ServiceUtility serviceUtility;
+    private Collection<ServiceUtility> serviceUtility;
 
     public Reservation() {
     }
@@ -78,11 +79,11 @@ public class Reservation extends AbstractEntity {
         this.status = status;
     }
 
-    public ServiceUtility getServiceUtility() {
+    public Collection<ServiceUtility> getServiceUtility() {
         return serviceUtility;
     }
 
-    public void setServiceUtility(ServiceUtility serviceUtility) {
+    public void setServiceUtility(Collection<ServiceUtility> serviceUtility) {
         this.serviceUtility = serviceUtility;
     }
 }

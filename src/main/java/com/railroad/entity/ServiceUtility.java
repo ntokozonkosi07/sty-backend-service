@@ -1,6 +1,7 @@
 package com.railroad.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
 
@@ -21,8 +22,38 @@ public class ServiceUtility extends AbstractEntity {
     @ManyToMany(mappedBy = "serviceUtilities")
     private Collection<Artist> artists;
 
+    @Min(value = 0, message = "price cannot be less than 0")
     private double price;
 
-    @OneToOne(mappedBy = "serviceUtility")
-    private Reservation reservation;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Collection<Requirement> getRequirements() {
+        return requirements;
+    }
+
+    public void setRequirements(Collection<Requirement> requirements) {
+        this.requirements = requirements;
+    }
+
+    public Collection<Artist> getArtists() {
+        return artists;
+    }
+
+    public void setArtists(Collection<Artist> artists) {
+        this.artists = artists;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 }
