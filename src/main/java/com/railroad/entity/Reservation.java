@@ -31,7 +31,7 @@ public class Reservation extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "Service_Id")
-    private Collection<ServiceProvided> serviceProvided;
+    private ServiceProvided serviceProvided;
 
     public Reservation() {
     }
@@ -81,11 +81,11 @@ public class Reservation extends AbstractEntity {
         this.status = status;
     }
 
-    public Collection<ServiceProvided> getServiceProvided() {
+    public ServiceProvided getServiceProvided() {
         return serviceProvided;
     }
 
-    public void setServiceProvided(Collection<ServiceProvided> serviceProvided) {
+    public void setServiceProvided(ServiceProvided serviceProvided) {
         this.serviceProvided = serviceProvided;
     }
 }
