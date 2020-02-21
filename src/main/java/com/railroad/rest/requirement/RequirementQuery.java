@@ -15,7 +15,7 @@ class RequirementQuery {
     @Inject
     EntityManager em;
 
-    Requirement createRequiremnt(Requirement requirement) throws EntityExistsException{
+    Requirement createRequirement(Requirement requirement) throws EntityExistsException{
         if(requirement.getId() != null)
             throw new EntityExistsException();
 
@@ -29,10 +29,18 @@ class RequirementQuery {
                 .getSingleResult();
     }
 
-    Collection<Requirement> getRequirements(int maxResults, int firstResults) throws IllegalArgumentException{
+    Collection<Requirement> getRequirements(Integer maxResults, Integer firstResults) throws IllegalArgumentException{
         return em.createNamedQuery(Requirement.FIND_REQUIREMENT_BY_ID, Requirement.class)
                 .setMaxResults(maxResults)
                 .setFirstResult(firstResults)
                 .getResultList();
+    }
+
+    Requirement updateRequirement(Requirement requirement) throws IllegalArgumentException{
+        if(requirement.getId() == null)
+            throw new IllegalArgumentException("Requirement does not have an id");
+
+        em.merge(requirement);
+        return requirement;
     }
 }
