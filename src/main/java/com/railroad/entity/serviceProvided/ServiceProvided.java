@@ -18,12 +18,12 @@ public class ServiceProvided extends AbstractEntity {
     @ManyToMany
     @JoinTable(
             name = "S_SERVICE_S_REQUIREMENT",
-            joinColumns = @JoinColumn(name = "USER_ID"),
-            inverseJoinColumns = @JoinColumn(name = "RATING_ID")
+            joinColumns = @JoinColumn(name = "SERVICE_PROVIDED_ID"),
+            inverseJoinColumns = @JoinColumn(name = "REQUIREMENT_ID")
     )
     private Collection<Requirement> requirements;
 
-    @ManyToMany(mappedBy = "serviceUtilities")
+    @ManyToMany(mappedBy = "serviceProvided")
     private Collection<Artist> artists;
 
     @Min(value = 0, message = "price cannot be less than 0")
