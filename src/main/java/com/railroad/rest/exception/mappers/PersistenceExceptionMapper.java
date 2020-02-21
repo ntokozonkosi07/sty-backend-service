@@ -1,5 +1,8 @@
 package com.railroad.rest.exception.mappers;
 
+import com.railroad.common.annotation.CustomExceptionMapperQualifier;
+
+import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.core.Response;
@@ -12,9 +15,12 @@ import static javax.ws.rs.core.Response.Status.CONFLICT;
 public class PersistenceExceptionMapper extends Exception
         implements ExceptionMapper<PersistenceException> {
 
+    @Inject
+    @CustomExceptionMapperQualifier
+    ICustomExceptiontMapper em;
+
     @Override
     public Response toResponse(PersistenceException exception) {
-        final Response build = Response.status(CONFLICT).build();
-        return build;
+        return em.mapResponse(exception, CONFLICT);
     }
 }
