@@ -6,12 +6,10 @@ import com.railroad.entity.requirement.Requirement;
 import javax.inject.Inject;
 import javax.persistence.EntityExistsException;
 import javax.persistence.NoResultException;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Collection;
 import java.util.Optional;
 
 @Log
@@ -28,17 +26,28 @@ public class RequirementRest {
         return Response.ok(req).build();
     }
 
-    public Response getRequirementById(Long id)
+    @Path("/{id}") @GET
+    public Response getRequirementById(@PathParam("id") Long id)
             throws NoResultException, IllegalArgumentException{
-        return null;
+
+        return Response.ok(rs.getRequirementById(id)).status(Response.Status.OK).build();
     }
 
-    public Response getRequirements(int maxResults, Optional<Integer> firstResults ) throws IllegalArgumentException {
+    @Path("/") @GET
+    public Response getRequirements(
+            @QueryParam("maxResults") @DefaultValue(value = "10") int maxResults,
+            @QueryParam("startIndex") @DefaultValue(value = "0") Optional<Integer> firstResults
+    ) throws IllegalArgumentException {
 
-        return null;
+        Collection<Requirement> reqs = rs.getRequirements(maxResults, firstResults);
+        return Response.ok(reqs).status(Response.Status.OK).build();
     }
 
+    @Path("/") @PUT
     public Response updateRequirement(Requirement requirement) throws IllegalArgumentException{
-        return null;
+        Requirement req = rs.updateRequirement(requirement);
+        return Response.ok(req).build();
     }
+
+
 }
