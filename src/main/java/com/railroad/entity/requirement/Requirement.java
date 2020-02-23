@@ -34,7 +34,7 @@ public class Requirement extends AbstractEntity {
     private Double price;
 
     @JsonbProperty(nillable = true)
-    @ManyToMany(mappedBy = "requirements", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "requirements", fetch = FetchType.LAZY)
     private Collection<ServiceProvided> servicesProvided;
 
     public String getName() {

@@ -5,6 +5,8 @@ import com.railroad.entity.User;
 import com.railroad.entity.adapters.CollectionAdapter;
 import com.railroad.entity.adapters.EntityAdapter;
 import com.railroad.entity.requirement.Requirement;
+import com.railroad.entity.serviceProvided.ServiceProvided;
+import com.railroad.rest.serviceProvided.ServiceProvidedService;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -30,18 +32,24 @@ public class RequirementRest {
     @Inject
     private RequirementService rs;
 
+    @Inject
+    private ServiceProvidedService sp;
+
     private Jsonb jsonb;
 
     @PostConstruct
     private void init(){
         JsonbConfig config = new JsonbConfig().withAdapters(new EntityAdapter() {
+
+
             @Override
             public Object adaptToJson(Object obj) throws Exception {
-                if( ((Requirement)obj).getServicesProvided() == null )
-                    ((Requirement)obj).setServicesProvided(new ArrayList<>());
 
+                Collection<ServiceProvided> services = sp.getRequirements(10);
+                ((Requirement)obj).setServicesProvided(services);
                 return obj;
             }
+
             @Override
             public Object adaptFromJson(Object obj) throws Exception {
                 return null;
@@ -80,6 +88,4 @@ public class RequirementRest {
         Requirement req = rs.updateRequirement(requirement);
         return Response.ok(req).build();
     }
-
-
 }
