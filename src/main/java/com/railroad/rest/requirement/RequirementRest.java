@@ -1,14 +1,21 @@
 package com.railroad.rest.requirement;
 
 import com.railroad.common.annotation.Log;
+import com.railroad.entity.User;
+import com.railroad.entity.adapters.EntityAdapter;
 import com.railroad.entity.requirement.Requirement;
 
 import javax.inject.Inject;
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
+import javax.json.bind.JsonbConfig;
 import javax.persistence.EntityExistsException;
 import javax.persistence.NoResultException;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -21,9 +28,24 @@ public class RequirementRest {
     RequirementService rs;
 
     @Path("/") @POST
-    public Response createRequirement(Requirement requirement) throws EntityExistsException {
+    public Response createRequirement(@Valid Requirement requirement) throws EntityExistsException {
+        JsonbConfig config = new JsonbConfig().withAdapters(new EntityAdapter() {
+            @Override
+            public Object adaptToJson(Object obj) throws Exception {
+                if( ((Requirement)obj).getServices() == null)
+                    ((Requirement)obj).setServices(new ArrayList<>());
+
+                return obj;
+            }
+            @Override
+            public Object adaptFromJson(Object obj) throws Exception {
+                return null;
+            }
+        });
+        Jsonb jsonb = JsonbBuilder.create(config);
+
         Requirement req = rs.createRequirement(requirement);
-        return Response.ok(req).build();
+        return Response.ok(jsonb.toJson(req)).build();
     }
 
     @Path("/{id}") @GET

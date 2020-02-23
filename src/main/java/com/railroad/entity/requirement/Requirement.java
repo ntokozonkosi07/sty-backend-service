@@ -4,11 +4,10 @@ import com.railroad.entity.AbstractEntity;
 import com.railroad.entity.User;
 import com.railroad.entity.serviceProvided.ServiceProvided;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.json.bind.annotation.JsonbProperty;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 
@@ -21,15 +20,19 @@ public class Requirement extends AbstractEntity {
     public static final String FIND_REQUIREMENT_BY_ID = "requirement.findRequirementById";
 
     @NotEmpty(message = "name cannot be empty")
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Size(min = 1, max = 280)
-    @NotEmpty(message = "description cannot be empty")
+    @NotNull(message = "description cannot be empty")
+    @Column(nullable = false)
     private String description;
 
-    @NotEmpty(message = "price cannot be empty")
-    private double price;
+    @NotNull(message = "price cannot be empty")
+    @Column(nullable = false)
+    private Double price;
 
+    @JsonbProperty(nillable = true)
     @ManyToMany(mappedBy = "requirements")
     private Collection<ServiceProvided> services;
 
