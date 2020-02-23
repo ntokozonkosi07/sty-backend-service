@@ -5,6 +5,7 @@ import com.railroad.entity.User;
 import com.railroad.entity.adapters.EntityAdapter;
 import com.railroad.entity.requirement.Requirement;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
@@ -27,9 +28,11 @@ public class RequirementRest {
     @Inject
     RequirementService rs;
 
-    @Path("/") @POST
-    public Response createRequirement(@Valid Requirement requirement) throws EntityExistsException {
-        JsonbConfig config = new JsonbConfig().withAdapters(new EntityAdapter() {
+    private JsonbConfig config;
+
+    @PostConstruct
+    private void init(){
+        config = new JsonbConfig().withAdapters(new EntityAdapter() {
             @Override
             public Object adaptToJson(Object obj) throws Exception {
                 if( ((Requirement)obj).getServices() == null)
@@ -42,6 +45,10 @@ public class RequirementRest {
                 return null;
             }
         });
+    }
+
+    @Path("/") @POST
+    public Response createRequirement(@Valid Requirement requirement) throws EntityExistsException {
         Jsonb jsonb = JsonbBuilder.create(config);
 
         Requirement req = rs.createRequirement(requirement);
