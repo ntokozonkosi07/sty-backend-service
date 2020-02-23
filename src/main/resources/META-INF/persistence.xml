@@ -5,7 +5,14 @@
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
-      <property name = "hibernate.show_sql" value = "false" />
+      <property name = "hibernate.show_sql" value = "true" />
+      
+        
+        <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
+        <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/ellipses" />
+        <property name="javax.persistence.jdbc.user" value="ellipses" />
+        <property name="javax.persistence.jdbc.password" value="ellipses" />
+        
     </properties>
   </persistence-unit>
 </persistence>
