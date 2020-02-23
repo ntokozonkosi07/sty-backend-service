@@ -39,7 +39,7 @@ public class RequirementRest {
             @QueryParam("startIndex") @DefaultValue(value = "0") Optional<Integer> firstResults
     ) throws IllegalArgumentException {
 
-        Collection<Requirement> reqs = rs.getRequirements(maxResults, firstResults);
+        Collection<Requirement> reqs = rs.getRequirements(maxResults, Optional.of(firstResults.get()));
         return Response.ok(reqs).status(Response.Status.OK).build();
     }
 

@@ -30,7 +30,7 @@ class RequirementQuery {
     }
 
     Collection<Requirement> getRequirements(Integer maxResults, Integer firstResults) throws IllegalArgumentException{
-        return em.createNamedQuery(Requirement.FIND_REQUIREMENT_BY_ID, Requirement.class)
+        return em.createNamedQuery(Requirement.FIND_ALL_REQUIREMENTS, Requirement.class)
                 .setMaxResults(maxResults)
                 .setFirstResult(firstResults)
                 .getResultList();
