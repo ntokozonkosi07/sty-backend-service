@@ -23,7 +23,7 @@ public class RequirementService {
         return rq.getRequirementById(id);
     }
 
-    public Collection<Requirement> getRequirements(int maxResults, Optional<Integer> firstResults ) throws IllegalArgumentException {
+    public Collection<Requirement> getRequirements(Integer maxResults, Optional<Integer> firstResults ) throws IllegalArgumentException {
         Integer firstRes = firstResults.isPresent() ? firstResults.get() : 0;
 
         if(firstRes > maxResults)
