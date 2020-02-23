@@ -3,6 +3,7 @@ package com.railroad.entity.requirement;
 import com.railroad.entity.AbstractEntity;
 import com.railroad.entity.User;
 import com.railroad.entity.serviceProvided.ServiceProvided;
+import sun.text.resources.cldr.en.FormatData_en_TT;
 
 import javax.json.bind.annotation.JsonbProperty;
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "S_REQUIREMENT")
-@NamedQuery(name= Requirement.FIND_ALL_REQUIREMENTS, query = "select r from Requirement r ORDER BY r.Id")
+@NamedQuery(name= Requirement.FIND_ALL_REQUIREMENTS, query = "select r from Requirement r")
 @NamedQuery(name= Requirement.FIND_REQUIREMENT_BY_ID, query = "select r from Requirement r where r.Id = :id")
 public class Requirement extends AbstractEntity {
     public static final String FIND_ALL_REQUIREMENTS = "requirement.findAllRequirements";
@@ -33,8 +34,8 @@ public class Requirement extends AbstractEntity {
     private Double price;
 
     @JsonbProperty(nillable = true)
-    @ManyToMany(mappedBy = "requirements")
-    private Collection<ServiceProvided> services;
+    @ManyToMany(mappedBy = "requirements", fetch = FetchType.EAGER)
+    private Collection<ServiceProvided> servicesProvided;
 
     public String getName() {
         return name;
@@ -60,11 +61,11 @@ public class Requirement extends AbstractEntity {
         this.price = price;
     }
 
-    public Collection<ServiceProvided> getServices() {
-        return services;
+    public Collection<ServiceProvided> getServicesProvided() {
+        return servicesProvided;
     }
 
-    public void setServices(Collection<ServiceProvided> services) {
-        this.services = services;
+    public void setServicesProvided(Collection<ServiceProvided> services) {
+        this.servicesProvided = services;
     }
 }
