@@ -38,11 +38,8 @@ public class RequirementRest {
     @PostConstruct
     private void init(){
         JsonbConfig config = new JsonbConfig().withAdapters(new EntityAdapter() {
-
-
             @Override
             public Object adaptToJson(Object obj) throws Exception {
-
                 Collection<ServiceProvided> services = rs.getRequirementAssociatedServicesProvided(((AbstractEntity)obj).getId(),10, Optional.of(0));
                 ((Requirement)obj).setServicesProvided(services);
                 return obj;
