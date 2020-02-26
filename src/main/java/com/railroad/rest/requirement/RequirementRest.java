@@ -1,6 +1,7 @@
 package com.railroad.rest.requirement;
 
 import com.railroad.common.annotation.Log;
+import com.railroad.entity.AbstractEntity;
 import com.railroad.entity.User;
 import com.railroad.entity.adapters.CollectionAdapter;
 import com.railroad.entity.adapters.EntityAdapter;
@@ -32,9 +33,6 @@ public class RequirementRest {
     @Inject
     private RequirementService rs;
 
-    @Inject
-    private ServiceProvidedService sp;
-
     private Jsonb jsonb;
 
     @PostConstruct
@@ -45,7 +43,7 @@ public class RequirementRest {
             @Override
             public Object adaptToJson(Object obj) throws Exception {
 
-                Collection<ServiceProvided> services = sp.getRequirements(10);
+                Collection<ServiceProvided> services = rs.getRequirementAssociatedServicesProvided(((AbstractEntity)obj).getId(),10, Optional.of(0));
                 ((Requirement)obj).setServicesProvided(services);
                 return obj;
             }

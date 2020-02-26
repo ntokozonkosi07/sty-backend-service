@@ -1,6 +1,7 @@
 package com.railroad.rest.requirement;
 
 import com.railroad.entity.requirement.Requirement;
+import com.railroad.entity.serviceProvided.ServiceProvided;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -30,6 +31,15 @@ public class RequirementService {
             throw new IllegalArgumentException("First results cannot be greater to max results");
 
         return rq.getRequirements(maxResults, firstRes);
+    }
+
+    public Collection<ServiceProvided> getRequirementAssociatedServicesProvided(Long requirementId, Integer maxResults, Optional<Integer> firstResults ) throws IllegalArgumentException {
+        Integer firstRes = firstResults.isPresent() ? firstResults.get() : 0;
+
+        if(firstRes > maxResults)
+            throw new IllegalArgumentException("First results cannot be greater to max results");
+
+        return rq.getRequirementAssociatedServicesProvided(requirementId,maxResults,firstRes);
     }
 
     public Requirement updateRequirement(Requirement requirement) throws IllegalArgumentException{
