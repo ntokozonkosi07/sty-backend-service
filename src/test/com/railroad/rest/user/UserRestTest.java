@@ -210,5 +210,4 @@ public class UserRestTest {
         assertEquals("baleka.dlela@balekas.co.za", _user.getEmail());
         assertEquals("Ndlela", _user.getLastName());
     }
-
 }
