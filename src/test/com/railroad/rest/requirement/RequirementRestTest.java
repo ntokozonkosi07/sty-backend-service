@@ -153,4 +153,32 @@ public class RequirementRestTest {
         Requirement _req = jsonb.fromJson(result, Requirement.class);
         assertEquals(_req.getName(), req.getName());
     }
+
+    @Test
+    @RunAsClient
+    @InSequence(3)
+    public void should_get_requirement_by_id() throws IOException {
+        HttpGet request = new HttpGet(url+"/1");
+
+        try (
+                CloseableHttpClient httpClient = HttpClients.createDefault();
+                CloseableHttpResponse response = httpClient.execute(request)
+        ) {
+            HttpEntity entity = response.getEntity();
+            String json = null;
+            if (entity != null) {
+                json = EntityUtils.toString(entity);
+                System.out.println(json);
+            }
+
+            Jsonb jsonb = JsonbBuilder.create(config);
+            Requirement req = jsonb.fromJson(json, Requirement.class);
+
+            assertEquals(200, response.getStatusLine().getStatusCode());
+            assertEquals("Hair Weave", req.getName());
+            assertEquals("its just fake hair", req.getDescription());
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        }
+    }
 }
