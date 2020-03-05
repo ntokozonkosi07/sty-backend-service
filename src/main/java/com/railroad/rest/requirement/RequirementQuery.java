@@ -46,7 +46,7 @@ class RequirementQuery {
         return requirement;
     }
 
-    public Collection<ServiceProvided> getRequirementAssociatedServicesProvided(Long requirementId, Integer maxResults, Integer firstResults)
+    Collection<ServiceProvided> getRequirementAssociatedServicesProvided(Long requirementId, Integer maxResults, Integer firstResults)
             throws IllegalArgumentException {
         return em.createNamedQuery(Requirement.FIND_SERVICES_PROVIDED_BY_REQUIREMENT_ID, ServiceProvided.class)
                 .setParameter("id", requirementId)

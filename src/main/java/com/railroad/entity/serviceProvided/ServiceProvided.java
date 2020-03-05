@@ -11,7 +11,11 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "S_SERVICE")
+@NamedQuery(name = ServiceProvided.FIND_ALL_SERVICE_PROVIDED, query = "SELECT s FROM ServiceProvided s")
+//@NamedQuery(name= Requirement.FIND_SERVICES_PROVIDED_BY_REQUIREMENT_ID, query = "SELECT s FROM Requirement r INNER JOIN r.servicesProvided s WHERE r.Id = :id")
 public class ServiceProvided extends AbstractEntity {
+    public static final String FIND_ALL_SERVICE_PROVIDED = "serviceProvided.getServicesProvided";
+
     @NotEmpty(message = "name cannot be empty")
     private String name;
 

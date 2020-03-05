@@ -12,18 +12,18 @@ import javax.validation.ConstraintViolationException;
 import java.util.Collection;
 
 @Transactional
-public class UserQuery {
+class UserQuery {
     @Inject
     EntityManager entityManager;
 
-    public Collection<User> getUsers(Integer maxResults, Integer firstResults){
+    Collection<User> getUsers(Integer maxResults, Integer firstResults){
          return entityManager.createNamedQuery(User.FIND_ALL_USERS, User.class)
                  .setMaxResults(maxResults)
                  .setFirstResult(firstResults)
                  .getResultList();
     }
 
-    public User createUser(User user) throws ConstraintViolationException {
+    User createUser(User user) throws ConstraintViolationException {
         if(user.getId() == null){
             entityManager.persist(user);
             return user;
@@ -32,7 +32,7 @@ public class UserQuery {
         return user;
     }
     
-    public User updateUser(User user) throws NoResultException {
+    User updateUser(User user) throws NoResultException {
         try {
             // if finduserById throws a NoResultException means the user is not found
 //            User user = this.findUserById(user.getId());
@@ -44,7 +44,7 @@ public class UserQuery {
         }
     }
     
-    public User findUserById(Long id){
+    User findUserById(Long id){
         return entityManager.createNamedQuery(User.FIND_USER_BY_ID, User.class)
                 .setParameter("id", id)
                 .getSingleResult();
