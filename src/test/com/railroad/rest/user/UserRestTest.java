@@ -145,7 +145,7 @@ public class UserRestTest {
 
                     @Override
                     public JsonObject adaptToJson(User obj) throws Exception {
-                        return super.adaptToJson(obj);
+                        return null;//super.adaptToJson(obj);
                     }
 
                     @Override

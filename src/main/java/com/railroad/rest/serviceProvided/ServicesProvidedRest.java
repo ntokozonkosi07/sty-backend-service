@@ -20,12 +20,18 @@ public class ServicesProvidedRest {
     ServiceProvidedService serviceProv;
 
     @GET @Path("/")
-    public Response getSerivceProvided(
+    public Response getSerivcesProvided(
             @QueryParam("maxResults") @DefaultValue(value = "10") Integer maxResults,
             @QueryParam("startIndex") @DefaultValue(value = "0") Optional<Integer> firstResults
     ){
-        Collection<ServiceProvided> servs = serviceProv.getRequirements(maxResults,firstResults);
+        Collection<ServiceProvided> servs = serviceProv.getSerivcesProvided(maxResults,firstResults);
 
         return Response.ok(servs).build();
+    }
+
+    @POST @Path("/")
+    public Response saveResponseProvided(ServiceProvided serviceProvided){
+        ServiceProvided serv = serviceProv.saveServiceProvided(serviceProvided);
+        return Response.ok(serv).build();
     }
 }

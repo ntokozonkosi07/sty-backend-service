@@ -15,12 +15,18 @@ public class ServiceProvidedService {
     private ServiceProvidedQuery sq;
 
 
-    public Collection<ServiceProvided> getRequirements(Integer maxResults, Optional<Integer> firstResults) {
+    public Collection<ServiceProvided> getSerivcesProvided(Integer maxResults, Optional<Integer> firstResults) {
         Integer firstRes = firstResults.isPresent() ? firstResults.get() : 0;
 
         if(firstRes > maxResults)
             throw new IllegalArgumentException("First results cannot be greater to max results");
 
-        return sq.getUsers(maxResults,firstRes);
+        return sq.getSerivcesProvided(maxResults,firstRes);
     }
+
+    public ServiceProvided saveServiceProvided(ServiceProvided serviceProvided){
+        return sq.saveServiceProvided(serviceProvided);
+    }
+
+
 }
