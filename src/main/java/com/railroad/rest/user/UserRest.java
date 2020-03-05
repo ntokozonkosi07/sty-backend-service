@@ -46,7 +46,7 @@ public class UserRest {
         });
         Jsonb jsonb = JsonbBuilder.create(config);
 
-        Collection<?> users = userService.getUsers();
+        Collection<?> users = userService.getUsers(10, java.util.Optional.of(0));
 
         return Response.ok(jsonb.toJson(users)).build();
     }

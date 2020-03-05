@@ -16,9 +16,11 @@ public class UserQuery {
     @Inject
     EntityManager entityManager;
 
-    public Collection<User> getUsers(){
+    public Collection<User> getUsers(Integer maxResults, Integer firstResults){
          return entityManager.createNamedQuery(User.FIND_ALL_USERS, User.class)
-                .getResultList();
+                 .setMaxResults(maxResults)
+                 .setFirstResult(firstResults)
+                 .getResultList();
     }
 
     public User createUser(User user) throws ConstraintViolationException {

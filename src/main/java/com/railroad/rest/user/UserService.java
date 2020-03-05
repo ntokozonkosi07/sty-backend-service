@@ -9,14 +9,19 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Stateless
 public class UserService {
     @Inject
     UserQuery query;
 
-    public Collection<User> getUsers(){
-        return query.getUsers();
+    public Collection<User> getUsers(Integer maxResults, Optional<Integer> firstResults){
+        Integer firstRes = firstResults.isPresent() ? firstResults.get() : 0;
+
+        if(firstRes > maxResults)
+            throw new IllegalArgumentException("First results cannot be greater to max results");
+        return query.getUsers(maxResults,firstRes);
     }
     
     public User createUser(User user) throws ConstraintViolationException {
