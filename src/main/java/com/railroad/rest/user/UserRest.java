@@ -14,7 +14,6 @@ import com.railroad.common.annotation.Log;
 import com.railroad.entity.User;
 import com.railroad.entity.adapters.EntityAdapter;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,9 +57,9 @@ public class UserRest {
     }
     
     @Path("/{query}")  @POST
-    public Response searchUser(@NotNull @PathParam("query") String query) throws NotImplementedException {
+    public Response searchUser(@NotNull @PathParam("query") String query) {
 //    	hook up elasticsearch here
-        throw new NotImplementedException();
+        return null;
     }
 
     @Path("/{id}") @GET

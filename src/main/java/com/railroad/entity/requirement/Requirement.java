@@ -3,7 +3,7 @@ package com.railroad.entity.requirement;
 import com.railroad.entity.AbstractEntity;
 import com.railroad.entity.User;
 import com.railroad.entity.serviceProvided.ServiceProvided;
-import sun.text.resources.cldr.en.FormatData_en_TT;
+//import sun.text.resources.cldr.en.FormatData_en_TT;
 
 import javax.json.bind.annotation.JsonbProperty;
 import javax.persistence.*;

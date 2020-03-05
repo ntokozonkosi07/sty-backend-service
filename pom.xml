@@ -22,6 +22,7 @@
 
     <build>
         <finalName>style-beat</finalName>
+<!--        <finalName>So Fly</finalName>-->
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>
@@ -34,6 +35,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
@@ -74,6 +76,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${maven.surefire.version}</version>
                         <configuration>
                             <systemPropertyVariables>
                                 <arquillian.launch>arquillian-wildfly-remote</arquillian.launch>
@@ -106,14 +109,39 @@
 		   	<plugins>
 		   		<plugin>
 		   			<groupId>org.apache.maven.plugins</groupId>
-	                  <artifactId>maven-surefire-plugin</artifactId>
-	                  <configuration>
-	                     <systemPropertyVariables>
-	                        <arquillian.launch>wildfly_managed</arquillian.launch>
-	                     </systemPropertyVariables>
-	                  </configuration>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>unpack</id>
+                            <phase>process-test-classes</phase>
+                            <goals>
+                                <goal>unpack</goal>
+                            </goals>
+                            <configuration>
+                                <artifactItems>
+                                    <artifactItem>
+                                        <groupId>org.wildfly</groupId>
+                                        <artifactId>wildfly-dist</artifactId>
+                                        <version>${version.org.wildfly}</version>
+                                        <type>zip</type>
+                                        <overWrite>false</overWrite>
+                                        <outputDirectory>${project.build.directory}</outputDirectory>
+                                    </artifactItem>
+                                </artifactItems>
+                            </configuration>
+                        </execution>
+                    </executions>
 		   		</plugin>
-		   	</plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <systemPropertyVariables>
+                            <arquillian.launch>wildfly_managed</arquillian.launch>
+                        </systemPropertyVariables>
+                    </configuration>
+                </plugin>
+            </plugins>
 		   </build>
 		</profile>
 	</profiles>
@@ -130,6 +158,12 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.10</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.0</version>
         </dependency>
 
         <!-- JSON-P API -->
@@ -181,6 +215,12 @@
             <version>1.0.0.Alpha4</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.protocol</groupId>
+            <artifactId>arquillian-protocol-servlet</artifactId>
+            <scope>test</scope>
+        </dependency>
         <!--end of Arqullian dependencies-->
     </dependencies>
 
@@ -188,6 +228,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+
+        <version.org.wildfly>18.0.0.Final</version.org.wildfly>
 
         <maven.surefire.version>2.22.0</maven.surefire.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
