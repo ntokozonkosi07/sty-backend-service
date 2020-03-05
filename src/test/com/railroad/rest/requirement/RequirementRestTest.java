@@ -17,6 +17,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -69,14 +70,17 @@ public class RequirementRestTest {
             JsonArray jsonArray = Json.createArrayBuilder().build();
 
 
-            JsonObject jsonObj = Json.createObjectBuilder().
+            JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder().
                     add("name", obj.getName()).
                     add("description", obj.getDescription()).
                     add("price", obj.getPrice()).
-                    add("servicesProvided", jsonArray).
-                    build();
+                    add("servicesProvided", jsonArray);
 
-            return jsonObj;
+            if(obj.getId() != null){
+                jsonObjBuilder.add("id", obj.getId());
+            }
+
+            return jsonObjBuilder.build();
         }
 
         @Override
@@ -99,7 +103,7 @@ public class RequirementRestTest {
     @Test
     @RunAsClient
     @InSequence(1)
-    public void get_list_of_requirements() throws IOException {
+    public void should_get_list_of_requirements() throws IOException {
         HttpGet request = new HttpGet(url);
 
         try (
@@ -123,7 +127,7 @@ public class RequirementRestTest {
     @Test
     @RunAsClient
     @InSequence(2)
-    public void save_requirement() throws IOException {
+    public void should_save_requirement() throws IOException {
         HttpPost post = new HttpPost(url);
 
         Requirement req = new Requirement();
@@ -181,4 +185,38 @@ public class RequirementRestTest {
             e.printStackTrace();
         }
     }
+
+
+    @Test @RunAsClient @InSequence(4)
+    public void should_update_requirement() throws IOException {
+        String result = "";
+        HttpPut putReq = new HttpPut(url);
+
+        Requirement req = new Requirement();
+        req.setId(1L);
+        req.setName("Acrylic");
+        req.setDescription("its just fake hair");
+        req.setPrice(42.5);
+        req.setServicesProvided(null);
+
+        Jsonb jsonb = JsonbBuilder.create(config);
+        String json = jsonb.toJson(req);
+
+
+        // send a JSON data
+        putReq.setEntity(new StringEntity(json));
+        putReq.setHeader("Accept", "application/json");
+        putReq.setHeader("Content-type", "application/json");
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(putReq)) {
+
+            result = EntityUtils.toString(response.getEntity());
+
+        }
+
+        Requirement _req = jsonb.fromJson(result, Requirement.class);
+        assertEquals("Acrylic", _req.getName());
+    }
+
 }
