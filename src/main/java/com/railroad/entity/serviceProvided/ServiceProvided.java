@@ -12,11 +12,15 @@ import java.util.Collection;
 @Entity
 @Table(name = "S_SERVICE")
 @NamedQuery(name = ServiceProvided.FIND_ALL_SERVICE_PROVIDED, query = "SELECT s FROM ServiceProvided s")
-//@NamedQuery(name= Requirement.FIND_SERVICES_PROVIDED_BY_REQUIREMENT_ID, query = "SELECT s FROM Requirement r INNER JOIN r.servicesProvided s WHERE r.Id = :id")
+@NamedQuery(name = ServiceProvided.FIND_ALL_SERVICE_PROVIDED_REQUIREMENTS, query = "SELECT r FROM ServiceProvided s INNER JOIN s.requirements r WHERE s.Id = :id")
+@NamedQuery(name = ServiceProvided.FIND_ALL_SERVICE_PROVIDED_ARTISTS, query = "SELECT a FROM ServiceProvided s INNER JOIN s.artists a WHERE s.Id = :id")
 public class ServiceProvided extends AbstractEntity {
     public static final String FIND_ALL_SERVICE_PROVIDED = "serviceProvided.getServicesProvided";
+    public static final String FIND_ALL_SERVICE_PROVIDED_REQUIREMENTS = "serviceProvided.getServicesProvided.Requirements";
+    public static final String FIND_ALL_SERVICE_PROVIDED_ARTISTS = "serviceProvided.getServicesProvided.artists";
 
     @NotEmpty(message = "name cannot be empty")
+    @Column(nullable = false, unique = true)
     private String name;
 
     @ManyToMany
