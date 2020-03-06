@@ -104,8 +104,15 @@ public class ServicesProvidedRest {
     }
 
     @POST @Path("/")
-    public Response saveResponseProvided(ServiceProvided serviceProvided){
+    public Response saveServiceProvided(ServiceProvided serviceProvided){
         ServiceProvided serv = serviceProv.saveServiceProvided(serviceProvided);
         return Response.ok(jsonb.toJson(serv)).build();
+    }
+
+    @POST @Path("/{id}")
+    public Response getServicesProvided(@PathParam("id") @DefaultValue(value = "0") Long id){
+        ServiceProvided servProd = serviceProv.getServicesProvided(id);
+
+        return Response.ok(jsonb.toJson(servProd)).build();
     }
 }

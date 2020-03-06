@@ -46,4 +46,9 @@ class ServiceProvidedQuery {
                 .getResultList();
     }
 
+    public ServiceProvided getServicesProvided(Long id) {
+        return entityManager.createNamedQuery(ServiceProvided.FIND_SERVICE_PROVIDED_BY_ID, ServiceProvided.class)
+                .setParameter("id", id)
+                .getSingleResult();
+    }
 }

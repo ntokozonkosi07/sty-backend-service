@@ -14,10 +14,13 @@ import java.util.Collection;
 @NamedQuery(name = ServiceProvided.FIND_ALL_SERVICE_PROVIDED, query = "SELECT s FROM ServiceProvided s")
 @NamedQuery(name = ServiceProvided.FIND_ALL_SERVICE_PROVIDED_REQUIREMENTS, query = "SELECT r FROM ServiceProvided s INNER JOIN s.requirements r WHERE s.Id = :id")
 @NamedQuery(name = ServiceProvided.FIND_ALL_SERVICE_PROVIDED_ARTISTS, query = "SELECT a FROM ServiceProvided s INNER JOIN s.artists a WHERE s.Id = :id")
+@NamedQuery(name = ServiceProvided.FIND_SERVICE_PROVIDED_BY_ID, query = "SELECT s FROM ServiceProvided s WHERE s.Id = :id")
 public class ServiceProvided extends AbstractEntity {
+
     public static final String FIND_ALL_SERVICE_PROVIDED = "serviceProvided.getServicesProvided";
     public static final String FIND_ALL_SERVICE_PROVIDED_REQUIREMENTS = "serviceProvided.getServicesProvided.Requirements";
     public static final String FIND_ALL_SERVICE_PROVIDED_ARTISTS = "serviceProvided.getServicesProvided.artists";
+    public static final String FIND_SERVICE_PROVIDED_BY_ID = "serviceProvided.getServiceProvidedById";
 
     @NotEmpty(message = "name cannot be empty")
     @Column(nullable = false, unique = true)

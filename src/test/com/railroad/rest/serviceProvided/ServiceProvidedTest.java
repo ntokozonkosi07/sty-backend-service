@@ -6,7 +6,9 @@ import com.railroad.common.filters.LoggingFilter;
 import com.railroad.common.producers.EntityManagerProducer;
 import com.railroad.configuration.config;
 import com.railroad.entity.Artist;
+import com.railroad.entity.Reservation;
 import com.railroad.entity.User;
+import com.railroad.entity.UserRating;
 import com.railroad.entity.requirement.Requirement;
 import com.railroad.entity.serviceProvided.ServiceProvided;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
@@ -237,5 +239,35 @@ public class ServiceProvidedTest {
         } catch (ClientProtocolException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    @RunAsClient
+    @InSequence(4)
+    public void should_get_saved_service_provided() throws IOException {
+        HttpPost request = new HttpPost(url+"/1");
+
+        try(
+                CloseableHttpClient httpClient = HttpClients.createDefault();
+                CloseableHttpResponse response = httpClient.execute(request)
+        ) {
+
+            HttpEntity entity = response.getEntity();
+            String json = null;
+            if (entity != null) {
+                // return it as a String
+                json = EntityUtils.toString(entity);
+                System.out.println(json);
+            }
+
+            ServiceProvided servProd = JsonbBuilder.create(config).fromJson(json, ServiceProvided.class);
+            assertEquals(servProd.getName(), "Hair Weave");
+            assertEquals(200, response.getStatusLine().getStatusCode());
+        } catch (Exception e){
+            System.out.println(e.getLocalizedMessage());
+            throw e;
+        }
+
+
     }
 }

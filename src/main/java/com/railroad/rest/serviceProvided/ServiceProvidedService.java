@@ -49,4 +49,7 @@ public class ServiceProvidedService {
     }
 
 
+    public ServiceProvided getServicesProvided(Long id) {
+        return sq.getServicesProvided(id);
+    }
 }
