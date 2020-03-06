@@ -29,6 +29,8 @@ import org.jboss.arquillian.junit.InSequence;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -45,6 +47,9 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Arquillian.class)
 public class ServiceProvidedTest {
 
+    private String url;
+    private JsonbConfig config;
+
     @Deployment
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class, "style-beat.war")
@@ -59,103 +64,106 @@ public class ServiceProvidedTest {
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
-    JsonbConfig config = new JsonbConfig().withAdapters(new EntityAdapter<ServiceProvided>(){
+    @Before
+    public void before(){
+       this.url = "http://localhost:8080/style-beat/api/v1/services-provided";
 
-        @Override
-        public JsonObject adaptToJson(ServiceProvided obj) {
-            JsonArrayBuilder jsonReqArr = Json.createArrayBuilder();
-            obj.getRequirements().forEach(r -> {
-                JsonArrayBuilder jsonServArr = Json.createArrayBuilder();
+        this.config = new JsonbConfig().withAdapters(new EntityAdapter<ServiceProvided>(){
 
-                JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder()
-                        .add("name", r.getName())
-                        .add("price", r.getPrice())
-                        .add("description", r.getDescription())
-                        .add("servicesProvided", jsonServArr);
+            @Override
+            public JsonObject adaptToJson(ServiceProvided obj) {
+                JsonArrayBuilder jsonReqArr = Json.createArrayBuilder();
+                obj.getRequirements().forEach(r -> {
+                    JsonArrayBuilder jsonServArr = Json.createArrayBuilder();
 
-                if(obj.getId() != null) jsonObjBuilder.add("id", obj.getId());
+                    JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder()
+                            .add("name", r.getName())
+                            .add("price", r.getPrice())
+                            .add("description", r.getDescription())
+                            .add("servicesProvided", jsonServArr);
 
-                JsonObject jsonObj = jsonObjBuilder.build();
-                jsonReqArr.add(jsonObj);
-            });
+                    if(obj.getId() != null) jsonObjBuilder.add("id", obj.getId());
 
-            JsonArray jsonArtArr = Json.createArrayBuilder().build();
-            obj.getArtists().forEach(a -> {
-                JsonArray jsonArr = Json.createArrayBuilder().build();
-                JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder()
-                        .add("email", a.getEmail())
-                        .add("name", a.getName())
-                        .add("lastName", a.getLastName())
-                        .add("picture", "")
-                        .add("reservations",jsonArr)
-                        .add("userRatings",jsonArr)
-                        .add("servicesProvided",jsonArr);
-
-                if(obj.getId() != null) jsonObjectBuilder.add("id", obj.getId());
-                JsonObject jsonObj = jsonObjectBuilder.build();
-
-                jsonArtArr.add(jsonObj);
-            });
-
-            JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder().
-                    add("name", obj.getName()).
-                    add("price", obj.getPrice()).
-                    add("requirements", jsonReqArr).
-                    add("artists", jsonArtArr);
-
-            if(obj.getId() != null){
-                jsonObjBuilder.add("id", obj.getId());
-            }
-
-            return jsonObjBuilder.build();
-        }
-
-        @Override
-        public ServiceProvided adaptFromJson(JsonObject obj) {
-            ServiceProvided serv = new ServiceProvided();
-            serv.setId(((JsonNumber)obj.get("id")).longValue());
-            serv.setName(((JsonString)obj.get("name")).getString());
-            serv.setPrice(((JsonNumber)obj.get("price")).doubleValue());
-
-            Collection<Requirement> reqs = new ArrayList<>();
-            JsonArray jsonReqs = obj.get("requirements").asJsonArray();
-            if (jsonReqs != null) {
-                jsonReqs.forEach(r ->{
-                    Requirement req = new Requirement();
-                    req.setId(((JsonNumber)((JsonObject)r).get("id")).longValue());
-                    req.setName(((JsonString)((JsonObject)r).get("name")).getString());
-                    req.setDescription(((JsonString)((JsonObject)r).get("description")).getString());
-                    req.setPrice(((JsonNumber)((JsonObject)r).get("price")).doubleValue());
-                    reqs.add(req);
+                    JsonObject jsonObj = jsonObjBuilder.build();
+                    jsonReqArr.add(jsonObj);
                 });
-            }
 
-            serv.setRequirements(reqs);
+                JsonArray jsonArtArr = Json.createArrayBuilder().build();
+                obj.getArtists().forEach(a -> {
+                    JsonArray jsonArr = Json.createArrayBuilder().build();
+                    JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder()
+                            .add("email", a.getEmail())
+                            .add("name", a.getName())
+                            .add("lastName", a.getLastName())
+                            .add("picture", "")
+                            .add("reservations",jsonArr)
+                            .add("userRatings",jsonArr)
+                            .add("servicesProvided",jsonArr);
 
-            Collection<Artist> artists = new ArrayList<>();
-            JsonArray jsonArts = obj.get("artists").asJsonArray();
-            if(jsonArts !=null){
-                jsonArts.forEach(a -> {
-                    Artist artist = new Artist();
-                    artist.setId(((JsonNumber)((JsonObject)a).get("id")).longValue());
-                    artist.setLastName(((JsonString)((JsonObject)a).get("lastName")).getString());
-                    artist.setName(((JsonString)((JsonObject)a).get("name")).getString());
-                    artist.setEmail(((JsonString)((JsonObject)a).get("email")).getString());
-                    artist.setPicture(null);
-                    artist.setUserRatings(new ArrayList<>());
-                    artist.setReservation(new ArrayList<>());
+                    if(obj.getId() != null) jsonObjectBuilder.add("id", obj.getId());
+                    JsonObject jsonObj = jsonObjectBuilder.build();
 
-                    artists.add(artist);
+                    jsonArtArr.add(jsonObj);
                 });
+
+                JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder().
+                        add("name", obj.getName()).
+                        add("price", obj.getPrice()).
+                        add("requirements", jsonReqArr).
+                        add("artists", jsonArtArr);
+
+                if(obj.getId() != null){
+                    jsonObjBuilder.add("id", obj.getId());
+                }
+
+                return jsonObjBuilder.build();
             }
 
-            serv.setArtists(artists);
+            @Override
+            public ServiceProvided adaptFromJson(JsonObject obj) {
+                ServiceProvided serv = new ServiceProvided();
+                serv.setId(((JsonNumber)obj.get("id")).longValue());
+                serv.setName(((JsonString)obj.get("name")).getString());
+                serv.setPrice(((JsonNumber)obj.get("price")).doubleValue());
 
-            return serv;
-        }
-    });
+                Collection<Requirement> reqs = new ArrayList<>();
+                JsonArray jsonReqs = obj.get("requirements").asJsonArray();
+                if (jsonReqs != null) {
+                    jsonReqs.forEach(r ->{
+                        Requirement req = new Requirement();
+                        req.setId(((JsonNumber)((JsonObject)r).get("id")).longValue());
+                        req.setName(((JsonString)((JsonObject)r).get("name")).getString());
+                        req.setDescription(((JsonString)((JsonObject)r).get("description")).getString());
+                        req.setPrice(((JsonNumber)((JsonObject)r).get("price")).doubleValue());
+                        reqs.add(req);
+                    });
+                }
 
-    String url = "http://localhost:8080/style-beat/api/v1/services-provided";
+                serv.setRequirements(reqs);
+
+                Collection<Artist> artists = new ArrayList<>();
+                JsonArray jsonArts = obj.get("artists").asJsonArray();
+                if(jsonArts !=null){
+                    jsonArts.forEach(a -> {
+                        Artist artist = new Artist();
+                        artist.setId(((JsonNumber)((JsonObject)a).get("id")).longValue());
+                        artist.setLastName(((JsonString)((JsonObject)a).get("lastName")).getString());
+                        artist.setName(((JsonString)((JsonObject)a).get("name")).getString());
+                        artist.setEmail(((JsonString)((JsonObject)a).get("email")).getString());
+                        artist.setPicture(null);
+                        artist.setUserRatings(new ArrayList<>());
+                        artist.setReservation(new ArrayList<>());
+
+                        artists.add(artist);
+                    });
+                }
+
+                serv.setArtists(artists);
+
+                return serv;
+            }
+        });
+    }
 
     @Test
     @RunAsClient
@@ -218,6 +226,35 @@ public class ServiceProvidedTest {
     @Test
     @RunAsClient
     @InSequence(3)
+    public void should_throw_exception_when_attempting_to_save_duplication_service_provided() throws IOException {
+        HttpPost post = new HttpPost(url);
+
+        ServiceProvided serv = new ServiceProvided();
+        serv.setName("Hair Weave");
+        serv.setRequirements(new ArrayList<>());
+        serv.setArtists(new ArrayList<>());
+        serv.setPrice(5.21);
+
+        Jsonb jsonb = JsonbBuilder.create(config);
+        String json = jsonb.toJson(serv);
+
+        String result;
+
+        // send a JSON data
+        post.setEntity(new StringEntity(json));
+        post.setHeader("Accept", "application/json");
+        post.setHeader("Content-type", "application/json");
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(post)) {
+
+            assertEquals(409, response.getStatusLine().getStatusCode());
+        }
+    }
+
+    @Test
+    @RunAsClient
+    @InSequence(4)
     public void should_get_list_of_services_provided_after_some_date_has_been_saved() throws IOException {
         HttpGet request = new HttpGet(url);
 
@@ -244,7 +281,7 @@ public class ServiceProvidedTest {
 
     @Test
     @RunAsClient
-    @InSequence(4)
+    @InSequence(5)
     public void should_get_saved_service_provided() throws IOException {
         HttpPost request = new HttpPost(url+"/1");
 
@@ -272,7 +309,7 @@ public class ServiceProvidedTest {
 
     @Test
     @RunAsClient
-    @InSequence(5)
+    @InSequence(6)
     public void should_update_saved_service_provided() throws IOException {
         HttpPut request = new HttpPut(url);
 
@@ -313,4 +350,6 @@ public class ServiceProvidedTest {
             throw e;
         }
     }
+
+
 }
