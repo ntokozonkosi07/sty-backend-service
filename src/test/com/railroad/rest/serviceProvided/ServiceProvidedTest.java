@@ -17,6 +17,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -267,7 +268,49 @@ public class ServiceProvidedTest {
             System.out.println(e.getLocalizedMessage());
             throw e;
         }
+    }
 
+    @Test
+    @RunAsClient
+    @InSequence(5)
+    public void should_update_saved_service_provided() throws IOException {
+        HttpPut request = new HttpPut(url);
 
+        ServiceProvided serv = new ServiceProvided();
+        serv.setId(1L);
+        serv.setName("Hair Weave bomb");
+        serv.setRequirements(new ArrayList<>());
+        serv.setArtists(new ArrayList<>());
+        serv.setPrice(54.5);
+
+        Jsonb jsonb = JsonbBuilder.create(config);
+        String json = jsonb.toJson(serv);
+
+        String result;
+
+        // send a JSON data
+        request.setEntity(new StringEntity(json));
+        request.setHeader("Accept", "application/json");
+        request.setHeader("Content-type", "application/json");
+
+        try(
+                CloseableHttpClient httpClient = HttpClients.createDefault();
+                CloseableHttpResponse response = httpClient.execute(request)
+        ) {
+            HttpEntity entity = response.getEntity();
+
+            if (entity != null) {
+                // return it as a String
+                json = EntityUtils.toString(entity);
+                System.out.println(json);
+            }
+
+            ServiceProvided servProd = JsonbBuilder.create(config).fromJson(json, ServiceProvided.class);
+            assertEquals(servProd.getName(), serv.getName());
+            assertEquals(200, response.getStatusLine().getStatusCode());
+        } catch (Exception e){
+            System.out.println(e.getLocalizedMessage());
+            throw e;
+        }
     }
 }

@@ -52,4 +52,8 @@ public class ServiceProvidedService {
     public ServiceProvided getServicesProvided(Long id) {
         return sq.getServicesProvided(id);
     }
+
+    public ServiceProvided updateServiceProvided(ServiceProvided service) {
+        return sq.updateServiceProvided(service);
+    }
 }

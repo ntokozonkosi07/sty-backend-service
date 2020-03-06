@@ -51,4 +51,8 @@ class ServiceProvidedQuery {
                 .setParameter("id", id)
                 .getSingleResult();
     }
+
+    public ServiceProvided updateServiceProvided(ServiceProvided service) throws IllegalArgumentException{
+        return entityManager.merge(service);
+    }
 }

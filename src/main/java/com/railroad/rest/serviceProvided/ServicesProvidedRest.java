@@ -11,6 +11,7 @@ import javax.json.*;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -94,7 +95,7 @@ public class ServicesProvidedRest {
     }
 
     @GET @Path("/")
-    public Response getSerivcesProvided(
+    public Response getSerivceProvided(
             @QueryParam("maxResults") @DefaultValue(value = "10") Integer maxResults,
             @QueryParam("startIndex") @DefaultValue(value = "0") Optional<Integer> firstResults
     ){
@@ -110,9 +111,15 @@ public class ServicesProvidedRest {
     }
 
     @POST @Path("/{id}")
-    public Response getServicesProvided(@PathParam("id") @DefaultValue(value = "0") Long id){
+    public Response getServiceProvided(@PathParam("id") @DefaultValue(value = "0") Long id){
         ServiceProvided servProd = serviceProv.getServicesProvided(id);
 
         return Response.ok(jsonb.toJson(servProd)).build();
+    }
+
+    @PUT @Path("/")
+    public Response updateServiceProvided(@Valid ServiceProvided service){
+        ServiceProvided serv = serviceProv.updateServiceProvided(service);
+        return Response.ok(jsonb.toJson(serv)).build();
     }
 }
