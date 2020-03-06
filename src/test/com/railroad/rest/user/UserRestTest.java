@@ -58,7 +58,7 @@ public class UserRestTest {
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
-    String url = "http://localhost:9999/style-beat/api/v1/users";
+    String url = "http://localhost:8080/style-beat/api/v1/users";
 
     @Test @RunAsClient  @InSequence(1)
     public void get_list_of_users() throws IOException {

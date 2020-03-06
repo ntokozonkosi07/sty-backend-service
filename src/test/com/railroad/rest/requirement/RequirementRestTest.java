@@ -60,7 +60,7 @@ public class RequirementRestTest {
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
-    String url = "http://localhost:9999/style-beat/api/v1/requirement";
+    String url = "http://localhost:8080/style-beat/api/v1/requirement";
 
     JsonbConfig config = new JsonbConfig().withAdapters(new EntityAdapter<Requirement>() {
 
