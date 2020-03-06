@@ -6,9 +6,7 @@ import com.railroad.common.filters.LoggingFilter;
 import com.railroad.common.producers.EntityManagerProducer;
 import com.railroad.configuration.config;
 import com.railroad.entity.Artist;
-import com.railroad.entity.Reservation;
 import com.railroad.entity.User;
-import com.railroad.entity.UserRating;
 import com.railroad.entity.requirement.Requirement;
 import com.railroad.entity.serviceProvided.ServiceProvided;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
@@ -21,7 +19,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.eclipse.yasson.internal.JsonBindingBuilder;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -62,7 +59,7 @@ public class ServiceProvidedTest {
     JsonbConfig config = new JsonbConfig().withAdapters(new EntityAdapter<ServiceProvided>(){
 
         @Override
-        public JsonObject adaptToJson(ServiceProvided obj) throws Exception {
+        public JsonObject adaptToJson(ServiceProvided obj) {
             JsonArrayBuilder jsonReqArr = Json.createArrayBuilder();
             obj.getRequirements().forEach(r -> {
                 JsonArrayBuilder jsonServArr = Json.createArrayBuilder();
@@ -111,13 +108,13 @@ public class ServiceProvidedTest {
         }
 
         @Override
-        public ServiceProvided adaptFromJson(JsonObject obj) throws Exception {
+        public ServiceProvided adaptFromJson(JsonObject obj) {
             ServiceProvided serv = new ServiceProvided();
             serv.setId(((JsonNumber)obj.get("id")).longValue());
             serv.setName(((JsonString)obj.get("name")).getString());
             serv.setPrice(((JsonNumber)obj.get("price")).doubleValue());
 
-            Collection<Requirement> reqs = new ArrayList<Requirement>();
+            Collection<Requirement> reqs = new ArrayList<>();
             JsonArray jsonReqs = obj.get("requirements").asJsonArray();
             if (jsonReqs != null) {
                 jsonReqs.forEach(r ->{
@@ -132,7 +129,7 @@ public class ServiceProvidedTest {
 
             serv.setRequirements(reqs);
 
-            Collection<Artist> artists = new ArrayList<Artist>();
+            Collection<Artist> artists = new ArrayList<>();
             JsonArray jsonArts = obj.get("artists").asJsonArray();
             if(jsonArts !=null){
                 jsonArts.forEach(a -> {
@@ -142,8 +139,8 @@ public class ServiceProvidedTest {
                     artist.setName(((JsonString)((JsonObject)a).get("name")).getString());
                     artist.setEmail(((JsonString)((JsonObject)a).get("email")).getString());
                     artist.setPicture(null);
-                    artist.setUserRatings(new ArrayList<UserRating>());
-                    artist.setReservation(new ArrayList<Reservation>());
+                    artist.setUserRatings(new ArrayList<>());
+                    artist.setReservation(new ArrayList<>());
 
                     artists.add(artist);
                 });
@@ -233,7 +230,7 @@ public class ServiceProvidedTest {
             }
 
             Jsonb jsonb = JsonbBuilder.create(config);
-            ArrayList<ServiceProvided> res = jsonb.fromJson(json, ArrayList.class);
+            Collection res = jsonb.fromJson(json, new ArrayList<ServiceProvided>(){}.getClass().getGenericSuperclass());
 
             assertEquals(200, response.getStatusLine().getStatusCode());
             assertEquals(1, res.size());
