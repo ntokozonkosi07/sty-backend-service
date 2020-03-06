@@ -94,11 +94,11 @@ public class ServicesProvidedRest {
     }
 
     @GET @Path("/")
-    public Response getSerivceProvided(
+    public Response getSerivcesProvided(
             @QueryParam("maxResults") @DefaultValue(value = "10") Integer maxResults,
             @QueryParam("startIndex") @DefaultValue(value = "0") Optional<Integer> firstResults
     ){
-        Collection<ServiceProvided> servs = serviceProv.getRequirements(maxResults,firstResults);
+        Collection<ServiceProvided> servs = serviceProv.getSerivcesProvided(maxResults,firstResults);
 
         return Response.ok(jsonb.toJson(servs)).build();
     }

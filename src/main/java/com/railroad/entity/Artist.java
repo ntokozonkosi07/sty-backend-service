@@ -21,11 +21,11 @@ public class Artist extends User {
     @OneToMany(mappedBy = "artist")
     private Collection<Reservation> reservations;
 
-    public Collection<ServiceProvided> getServiceUtilities() {
+    public Collection<ServiceProvided> getServicesProvided() {
         return serviceProvided;
     }
 
-    public void setServiceUtilities(Collection<ServiceProvided> serviceUtilities) {
+    public void setServicesProvided(Collection<ServiceProvided> serviceUtilities) {
         this.serviceProvided = serviceUtilities;
     }
 

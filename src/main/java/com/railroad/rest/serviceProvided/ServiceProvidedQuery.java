@@ -18,7 +18,7 @@ class ServiceProvidedQuery {
     @Inject
     EntityManager entityManager;
 
-    Collection<ServiceProvided> getUsers(Integer maxResults, Integer firstResults){
+    Collection<ServiceProvided> getSerivcesProvided(Integer maxResults, Integer firstResults) throws IllegalArgumentException{
         return entityManager.createNamedQuery(ServiceProvided.FIND_ALL_SERVICE_PROVIDED, ServiceProvided.class)
                 .setMaxResults(maxResults)
                 .setFirstResult(firstResults)

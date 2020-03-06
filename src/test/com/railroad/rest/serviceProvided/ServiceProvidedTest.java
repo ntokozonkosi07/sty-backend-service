@@ -10,11 +10,12 @@ import com.railroad.entity.User;
 import com.railroad.entity.requirement.Requirement;
 import com.railroad.entity.serviceProvided.ServiceProvided;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
-import com.railroad.rest.user.UserRest;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -28,7 +29,13 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.json.*;
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
+import javax.json.bind.JsonbConfig;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 
