@@ -152,7 +152,7 @@ public class ServiceProvidedTest {
         }
     });
 
-    String url = "http://localhost:9999/style-beat/api/v1/services-provided";
+    String url = "http://localhost:8080/style-beat/api/v1/services-provided";
 
     @Test
     @RunAsClient
