@@ -110,7 +110,7 @@ public class ServicesProvidedRest {
         return Response.ok(jsonb.toJson(serv)).build();
     }
 
-    @POST @Path("/{id}")
+    @GET @Path("/{id}")
     public Response getServiceProvided(@PathParam("id") @DefaultValue(value = "0") Long id){
         ServiceProvided servProd = serviceProv.getServicesProvided(id);
 

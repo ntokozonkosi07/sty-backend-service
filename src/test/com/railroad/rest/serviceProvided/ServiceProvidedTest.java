@@ -6,21 +6,14 @@ import com.railroad.common.filters.LoggingFilter;
 import com.railroad.common.producers.EntityManagerProducer;
 import com.railroad.configuration.config;
 import com.railroad.entity.Artist;
-import com.railroad.entity.Reservation;
 import com.railroad.entity.User;
-import com.railroad.entity.UserRating;
 import com.railroad.entity.requirement.Requirement;
 import com.railroad.entity.serviceProvided.ServiceProvided;
+import com.railroad.rest.common.HttpUtils;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -30,7 +23,6 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -49,6 +41,7 @@ public class ServiceProvidedTest {
 
     private String url;
     private JsonbConfig config;
+    private HttpUtils http;
 
     @Deployment
     public static WebArchive createDeployment() {
@@ -163,28 +156,21 @@ public class ServiceProvidedTest {
                 return serv;
             }
         });
+
+        this.http = new HttpUtils();
     }
 
     @Test
     @RunAsClient
     @InSequence(1)
     public void should_get_list_of_services_provided() throws IOException {
-        HttpGet request = new HttpGet(url);
-
-        try (
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                CloseableHttpResponse response = httpClient.execute(request)
-        ) {
+        try(CloseableHttpResponse response = http.get(url)){
             HttpEntity entity = response.getEntity();
-            String json = null;
-            if (entity != null) {
-                json = EntityUtils.toString(entity);
-                System.out.println(json);
-            }
+            String json = EntityUtils.toString(entity);
 
             assertEquals(200, response.getStatusLine().getStatusCode());
             assertEquals(json, "[]");
-        } catch (ClientProtocolException e) {
+        } catch (ClientProtocolException e){
             e.printStackTrace();
         }
     }
@@ -193,62 +179,33 @@ public class ServiceProvidedTest {
     @RunAsClient
     @InSequence(2)
     public void should_save_service_provided() throws IOException {
-        HttpPost post = new HttpPost(url);
-
-        ServiceProvided serv = new ServiceProvided();
-        serv.setName("Hair Weave");
-        serv.setRequirements(new ArrayList<>());
-        serv.setArtists(new ArrayList<>());
-        serv.setPrice(5.21);
+        ServiceProvided serv = new ServiceProvided("Hair Weave",new ArrayList<>(),new ArrayList<>(),5.21);
 
         Jsonb jsonb = JsonbBuilder.create(config);
         String json = jsonb.toJson(serv);
 
-        String result;
+        try(CloseableHttpResponse response = this.http.post(url,json)) {
+            String result = EntityUtils.toString(response.getEntity());
 
-        // send a JSON data
-        post.setEntity(new StringEntity(json));
-        post.setHeader("Accept", "application/json");
-        post.setHeader("Content-type", "application/json");
-
-        try (CloseableHttpClient httpClient = HttpClients.createDefault();
-             CloseableHttpResponse response = httpClient.execute(post)) {
-
-            result = EntityUtils.toString(response.getEntity());
-
+            ServiceProvided _serv = jsonb.fromJson(result, ServiceProvided.class);
+            assertEquals(_serv.getName(), serv.getName());
+        } catch (Exception e){
+            throw e;
         }
-
-
-        ServiceProvided _serv = jsonb.fromJson(result, ServiceProvided.class);
-        assertEquals(_serv.getName(), serv.getName());
     }
 
     @Test
     @RunAsClient
     @InSequence(3)
     public void should_throw_exception_when_attempting_to_save_duplication_service_provided() throws IOException {
-        HttpPost post = new HttpPost(url);
-
-        ServiceProvided serv = new ServiceProvided();
-        serv.setName("Hair Weave");
-        serv.setRequirements(new ArrayList<>());
-        serv.setArtists(new ArrayList<>());
-        serv.setPrice(5.21);
+        ServiceProvided serv = new ServiceProvided("Hair Weave",new ArrayList<>(),new ArrayList<>(),5.21);
 
         Jsonb jsonb = JsonbBuilder.create(config);
         String json = jsonb.toJson(serv);
-
-        String result;
-
-        // send a JSON data
-        post.setEntity(new StringEntity(json));
-        post.setHeader("Accept", "application/json");
-        post.setHeader("Content-type", "application/json");
-
-        try (CloseableHttpClient httpClient = HttpClients.createDefault();
-             CloseableHttpResponse response = httpClient.execute(post)) {
-
+        try(CloseableHttpResponse response = this.http.post(url,json)) {
             assertEquals(409, response.getStatusLine().getStatusCode());
+        } catch (Exception e){
+            throw e;
         }
     }
 
@@ -256,25 +213,16 @@ public class ServiceProvidedTest {
     @RunAsClient
     @InSequence(4)
     public void should_get_list_of_services_provided_after_some_date_has_been_saved() throws IOException {
-        HttpGet request = new HttpGet(url);
-
-        try (
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                CloseableHttpResponse response = httpClient.execute(request)
-        ) {
+        try(CloseableHttpResponse response = http.get(url)){
             HttpEntity entity = response.getEntity();
-            String json = null;
-            if (entity != null) {
-                json = EntityUtils.toString(entity);
-                System.out.println(json);
-            }
+            String json = EntityUtils.toString(entity);
 
             Jsonb jsonb = JsonbBuilder.create(config);
             Collection res = jsonb.fromJson(json, new ArrayList<ServiceProvided>(){}.getClass().getGenericSuperclass());
 
             assertEquals(200, response.getStatusLine().getStatusCode());
             assertEquals(1, res.size());
-        } catch (ClientProtocolException e) {
+        } catch (ClientProtocolException e){
             e.printStackTrace();
         }
     }
@@ -283,27 +231,17 @@ public class ServiceProvidedTest {
     @RunAsClient
     @InSequence(5)
     public void should_get_saved_service_provided() throws IOException {
-        HttpPost request = new HttpPost(url+"/1");
-
-        try(
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                CloseableHttpResponse response = httpClient.execute(request)
-        ) {
-
+        try(CloseableHttpResponse response = http.get(url+"/1")){
             HttpEntity entity = response.getEntity();
-            String json = null;
-            if (entity != null) {
-                // return it as a String
-                json = EntityUtils.toString(entity);
-                System.out.println(json);
-            }
+            String json = EntityUtils.toString(entity);
 
+            Jsonb jsonb = JsonbBuilder.create(config);
             ServiceProvided servProd = JsonbBuilder.create(config).fromJson(json, ServiceProvided.class);
+
             assertEquals(servProd.getName(), "Hair Weave");
             assertEquals(200, response.getStatusLine().getStatusCode());
-        } catch (Exception e){
-            System.out.println(e.getLocalizedMessage());
-            throw e;
+        } catch (ClientProtocolException e){
+            e.printStackTrace();
         }
     }
 
@@ -311,38 +249,17 @@ public class ServiceProvidedTest {
     @RunAsClient
     @InSequence(6)
     public void should_update_saved_service_provided() throws IOException {
-        HttpPut request = new HttpPut(url);
-
-        ServiceProvided serv = new ServiceProvided();
-        serv.setId(1L);
-        serv.setName("Hair Weave bomb");
-        serv.setRequirements(new ArrayList<>());
-        serv.setArtists(new ArrayList<>());
-        serv.setPrice(54.5);
+        ServiceProvided serv = new ServiceProvided(1L,"Hair Weave Bomb",new ArrayList<>(),new ArrayList<>(),5.21);
 
         Jsonb jsonb = JsonbBuilder.create(config);
         String json = jsonb.toJson(serv);
 
-        String result;
-
-        // send a JSON data
-        request.setEntity(new StringEntity(json));
-        request.setHeader("Accept", "application/json");
-        request.setHeader("Content-type", "application/json");
-
-        try(
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                CloseableHttpResponse response = httpClient.execute(request)
-        ) {
+        try(CloseableHttpResponse response = http.put(url,json)){
             HttpEntity entity = response.getEntity();
 
-            if (entity != null) {
-                // return it as a String
-                json = EntityUtils.toString(entity);
-                System.out.println(json);
-            }
+            json = EntityUtils.toString(entity);
 
-            ServiceProvided servProd = JsonbBuilder.create(config).fromJson(json, ServiceProvided.class);
+            ServiceProvided servProd = jsonb.fromJson(json, ServiceProvided.class);
             assertEquals(servProd.getName(), serv.getName());
             assertEquals(200, response.getStatusLine().getStatusCode());
         } catch (Exception e){

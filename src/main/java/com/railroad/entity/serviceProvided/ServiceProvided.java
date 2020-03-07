@@ -7,6 +7,7 @@ import com.railroad.entity.requirement.Requirement;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
 @Entity
@@ -21,6 +22,31 @@ public class ServiceProvided extends AbstractEntity {
     public static final String FIND_ALL_SERVICE_PROVIDED_REQUIREMENTS = "serviceProvided.getServicesProvided.Requirements";
     public static final String FIND_ALL_SERVICE_PROVIDED_ARTISTS = "serviceProvided.getServicesProvided.artists";
     public static final String FIND_SERVICE_PROVIDED_BY_ID = "serviceProvided.getServiceProvidedById";
+
+    public ServiceProvided() {}
+
+    public ServiceProvided(
+            @NotEmpty(message = "name cannot be empty") String name,
+            Collection<Requirement> requirements,
+            Collection<Artist> artists,
+            @Min(value = 0,message = "price cannot be less than 0") double price
+    ) {
+        this.setName(name);
+        this.setRequirements(requirements);
+        this.setArtists(artists);
+        this.setPrice(price);
+    }
+
+    public ServiceProvided(
+            @NotNull Long id,
+            @NotEmpty(message = "name cannot be empty") String name,
+            Collection<Requirement> requirements,
+            Collection<Artist> artists,
+            @Min(value = 0,message = "price cannot be less than 0") double price
+    ) {
+        this(name,requirements,artists,price);
+        this.setId(id);
+    }
 
     @NotEmpty(message = "name cannot be empty")
     @Column(nullable = false, unique = true)
