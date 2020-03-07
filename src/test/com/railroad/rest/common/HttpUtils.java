@@ -16,9 +16,8 @@ import static org.junit.Assert.assertEquals;
 public class HttpUtils {
     private CloseableHttpResponse connection(HttpUriRequest request) throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        CloseableHttpResponse response = httpClient.execute(request);
 
-        return response;
+        return httpClient.execute(request);
     }
 
     public CloseableHttpResponse get(String url) throws IOException {
