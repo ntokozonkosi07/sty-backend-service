@@ -4,6 +4,7 @@ import com.railroad.entity.Artist;
 import com.railroad.entity.User;
 import com.railroad.entity.requirement.Requirement;
 import com.railroad.entity.serviceProvided.ServiceProvided;
+import com.railroad.rest.common.AbstractService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -12,18 +13,9 @@ import java.util.Collection;
 import java.util.Optional;
 
 @Stateless
-public class ServiceProvidedService {
+public class ServiceProvidedService extends AbstractService {
     @Inject
     private ServiceProvidedQuery sq;
-
-    private Integer parameterValidation(Integer maxResults, Optional<Integer> firstResults) throws IllegalArgumentException{
-        Integer firstRes = firstResults.isPresent() ? firstResults.get() : 0;
-
-        if(firstRes > maxResults)
-            throw new IllegalArgumentException("First results cannot be greater to max results");
-
-        return firstRes;
-    }
 
 
     public Collection<ServiceProvided> getSerivcesProvided(Integer maxResults, Optional<Integer> firstResults) throws IllegalArgumentException{

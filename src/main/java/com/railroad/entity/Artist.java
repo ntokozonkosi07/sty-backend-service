@@ -11,23 +11,8 @@ public class Artist extends User {
 
 	private static final long serialVersionUID = 1L;
 
-	@ManyToMany
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "ARTIST_ID"),
-            inverseJoinColumns = @JoinColumn(name = "SERVICE_ID")
-    )
-    private Collection<ServiceProvided> serviceProvided;
-
     @OneToMany(mappedBy = "artist")
     private Collection<Reservation> reservations;
-
-    public Collection<ServiceProvided> getServicesProvided() {
-        return serviceProvided;
-    }
-
-    public void setServicesProvided(Collection<ServiceProvided> serviceUtilities) {
-        this.serviceProvided = serviceUtilities;
-    }
 
     public Collection<Reservation> getReservations() {
         return reservations;

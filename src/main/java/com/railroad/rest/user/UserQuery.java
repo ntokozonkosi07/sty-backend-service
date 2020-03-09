@@ -1,14 +1,15 @@
 package com.railroad.rest.user;
 
+import com.railroad.entity.Reservation;
 import com.railroad.entity.User;
-import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
+import com.railroad.entity.UserRating;
+import com.railroad.entity.serviceProvided.ServiceProvided;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
-
 import java.util.Collection;
 
 @Transactional
@@ -49,4 +50,29 @@ class UserQuery {
                 .setParameter("id", id)
                 .getSingleResult();
     }
+
+    public Collection<UserRating> findUserRatingsById(Long id,Integer maxResults, Integer firstResults) {
+        return entityManager.createNamedQuery(User.FIND_USER_RATING_BY_ID, UserRating.class)
+                .setParameter("id", id)
+                .setMaxResults(maxResults)
+                .setFirstResult(firstResults)
+                .getResultList();
+    }
+
+    public Collection<Reservation> findReservationsById(Long id, int maxResults, Integer firstResults) {
+        return entityManager.createNamedQuery(User.FIND_USER_RESERVATIONS_BY_ID, Reservation.class)
+                .setParameter("id", id)
+                .setMaxResults(maxResults)
+                .setFirstResult(firstResults)
+                .getResultList();
+    }
+
+    public Collection<ServiceProvided> findServicesProvidedById(Long id, Integer maxResults, Integer firstResults) {
+        return entityManager.createNamedQuery(User.FIND_USER_SERVICES_PROVIDED_BY_ID, ServiceProvided.class)
+                .setParameter("id", id)
+                .setMaxResults(maxResults)
+                .setFirstResult(firstResults)
+                .getResultList();
+    }
+
 }
