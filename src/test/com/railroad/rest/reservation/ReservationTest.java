@@ -19,6 +19,7 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -52,6 +53,7 @@ public class ReservationTest {
     @Test
     @RunAsClient
     @InSequence(1)
+    @Ignore
     public void should_book_a_reservation(){
 
     }

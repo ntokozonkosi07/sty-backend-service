@@ -1,6 +1,5 @@
 package com.railroad.rest.serviceProvided;
 
-import com.railroad.entity.Artist;
 import com.railroad.entity.User;
 import com.railroad.entity.requirement.Requirement;
 import com.railroad.entity.serviceProvided.ServiceProvided;
@@ -8,7 +7,6 @@ import com.railroad.rest.common.AbstractService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -34,7 +32,7 @@ public class ServiceProvidedService extends AbstractService {
         return sq.getServiceProvidedRequirements(id,maxResults,firstRes);
     }
 
-    public Collection<Artist> getServiceProvidedArtists(Long id, Integer maxResults, Optional<Integer> firstResults)throws IllegalArgumentException {
+    public Collection<User> getServiceProvidedArtists(Long id, Integer maxResults, Optional<Integer> firstResults)throws IllegalArgumentException {
         Integer firstRes = parameterValidation(maxResults,firstResults);
 
         return sq.getServiceProvidedArtists(id, maxResults,firstRes);

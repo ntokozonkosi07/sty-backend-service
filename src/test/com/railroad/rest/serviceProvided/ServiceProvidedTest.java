@@ -5,7 +5,6 @@ import com.railroad.common.entityAdapters.EntityAdapter;
 import com.railroad.common.filters.LoggingFilter;
 import com.railroad.common.producers.EntityManagerProducer;
 import com.railroad.configuration.config;
-import com.railroad.entity.Artist;
 import com.railroad.entity.User;
 import com.railroad.entity.requirement.Requirement;
 import com.railroad.entity.serviceProvided.ServiceProvided;
@@ -135,11 +134,11 @@ public class ServiceProvidedTest {
 
                 serv.setRequirements(reqs);
 
-                Collection<Artist> artists = new ArrayList<>();
+                Collection<User> artists = new ArrayList<>();
                 JsonArray jsonArts = obj.get("artists").asJsonArray();
                 if(jsonArts !=null){
                     jsonArts.forEach(a -> {
-                        Artist artist = new Artist();
+                        User artist = new User();
                         artist.setId(((JsonNumber)((JsonObject)a).get("id")).longValue());
                         artist.setLastName(((JsonString)((JsonObject)a).get("lastName")).getString());
                         artist.setName(((JsonString)((JsonObject)a).get("name")).getString());

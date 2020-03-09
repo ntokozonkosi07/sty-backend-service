@@ -1,7 +1,7 @@
 package com.railroad.entity.serviceProvided;
 
 import com.railroad.entity.AbstractEntity;
-import com.railroad.entity.Artist;
+import com.railroad.entity.User;
 import com.railroad.entity.requirement.Requirement;
 
 import javax.persistence.*;
@@ -28,7 +28,7 @@ public class ServiceProvided extends AbstractEntity {
     public ServiceProvided(
             @NotEmpty(message = "name cannot be empty") String name,
             Collection<Requirement> requirements,
-            Collection<Artist> artists,
+            Collection<User> artists,
             @Min(value = 0,message = "price cannot be less than 0") double price
     ) {
         this.setName(name);
@@ -41,7 +41,7 @@ public class ServiceProvided extends AbstractEntity {
             @NotNull Long id,
             @NotEmpty(message = "name cannot be empty") String name,
             Collection<Requirement> requirements,
-            Collection<Artist> artists,
+            Collection<User> artists,
             @Min(value = 0,message = "price cannot be less than 0") double price
     ) {
         this(name,requirements,artists,price);
@@ -61,7 +61,7 @@ public class ServiceProvided extends AbstractEntity {
     private Collection<Requirement> requirements;
 
     @ManyToMany(mappedBy = "serviceProvided")
-    private Collection<Artist> artists;
+    private Collection<User> artists;
 
     @Min(value = 0, message = "price cannot be less than 0")
     private double price;
@@ -82,11 +82,11 @@ public class ServiceProvided extends AbstractEntity {
         this.requirements = requirements;
     }
 
-    public Collection<Artist> getArtists() {
+    public Collection<User> getArtists() {
         return artists;
     }
 
-    public void setArtists(Collection<Artist> artists) {
+    public void setArtists(Collection<User> artists) {
         this.artists = artists;
     }
 

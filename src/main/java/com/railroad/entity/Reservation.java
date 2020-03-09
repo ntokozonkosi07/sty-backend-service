@@ -15,11 +15,11 @@ public class Reservation extends AbstractEntity {
 
     @ManyToOne
     @MapsId("clientId")
-    private Client client;
+    private User client;
 
     @ManyToOne
     @MapsId("artistId")
-    private Artist artist;
+    private User artist;
 
     @NotNull
     private LocalDateTime datTimeFrom;
@@ -41,19 +41,19 @@ public class Reservation extends AbstractEntity {
         this.status = ReservationState.PENDING;
     }
 
-    public Client getClient() {
+    public User getClient() {
         return client;
     }
 
-    public void setClient(Client client) {
+    public void setClient(User client) {
         this.client = client;
     }
 
-    public Artist getArtist() {
+    public User getArtist() {
         return artist;
     }
 
-    public void setArtist(Artist artist) {
+    public void setArtist(User artist) {
         this.artist = artist;
     }
 
