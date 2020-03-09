@@ -12,6 +12,8 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "S_USER")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "USER_TYPE")
 @NamedQuery(name=User.FIND_ALL_USERS, query = "select u from User u")
 @NamedQuery(name=User.FIND_USER_BY_ID, query = "select u from User u where u.Id = :id")
 @NamedQuery(name=User.FIND_USER_RATING_BY_ID, query = "SELECT r from User u INNER JOIN u.userRatings r WHERE u.Id = :id")
@@ -57,7 +59,6 @@ public class User extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "SERVICE_ID")
     )
     private Collection<ServiceProvided> serviceProvided;
-
 
     public String getName() {
         return name;

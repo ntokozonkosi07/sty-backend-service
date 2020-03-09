@@ -9,6 +9,7 @@ import com.railroad.entity.Artist;
 import com.railroad.entity.User;
 import com.railroad.entity.requirement.Requirement;
 import com.railroad.entity.serviceProvided.ServiceProvided;
+import com.railroad.rest.common.AbstractService;
 import com.railroad.rest.common.HttpUtils;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
 import org.apache.http.HttpEntity;
@@ -51,7 +52,7 @@ public class ServiceProvidedTest {
                 .addPackage(User.class.getPackage())
                 .addPackage(EntityManagerProducer.class.getPackage())
                 .addPackage(LoggingFilter.class.getPackage())
-                .addClasses(ServiceProvided.class, Requirement.class,com.railroad.entity.adapters.EntityAdapter.class, EntityAdapter.class, config.class)
+                .addClasses(AbstractService.class, ServiceProvided.class, Requirement.class,com.railroad.entity.adapters.EntityAdapter.class, EntityAdapter.class, config.class)
                 .addPackage(CustomExceptionMapperQualifier.class.getPackage())
                 .addAsResource("persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
