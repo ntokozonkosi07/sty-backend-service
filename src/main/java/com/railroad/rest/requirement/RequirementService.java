@@ -1,7 +1,7 @@
 package com.railroad.rest.requirement;
 
-import com.railroad.entity.requirement.Requirement;
-import com.railroad.entity.serviceProvided.ServiceProvided;
+import com.railroad.entity.Requirement;
+import com.railroad.entity.ServiceProvided;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

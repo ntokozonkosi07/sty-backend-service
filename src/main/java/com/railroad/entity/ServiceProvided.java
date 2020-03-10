@@ -1,8 +1,4 @@
-package com.railroad.entity.serviceProvided;
-
-import com.railroad.entity.AbstractEntity;
-import com.railroad.entity.User;
-import com.railroad.entity.requirement.Requirement;
+package com.railroad.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;

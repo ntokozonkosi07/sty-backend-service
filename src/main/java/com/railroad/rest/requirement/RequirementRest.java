@@ -2,16 +2,12 @@ package com.railroad.rest.requirement;
 
 import com.railroad.common.annotation.Log;
 import com.railroad.entity.AbstractEntity;
-import com.railroad.entity.User;
-import com.railroad.entity.adapters.CollectionAdapter;
 import com.railroad.entity.adapters.EntityAdapter;
-import com.railroad.entity.requirement.Requirement;
-import com.railroad.entity.serviceProvided.ServiceProvided;
-import com.railroad.rest.serviceProvided.ServiceProvidedService;
+import com.railroad.entity.Requirement;
+import com.railroad.entity.ServiceProvided;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.json.JsonArray;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
@@ -21,7 +17,6 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 

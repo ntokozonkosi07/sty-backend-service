@@ -15,12 +15,10 @@ import javax.ws.rs.core.Response;
 import com.railroad.common.annotation.Log;
 import com.railroad.entity.AbstractEntity;
 import com.railroad.entity.User;
-import com.railroad.entity.UserRating;
 import com.railroad.entity.adapters.EntityAdapter;
-import com.railroad.entity.serviceProvided.ServiceProvided;
+import com.railroad.entity.ServiceProvided;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 

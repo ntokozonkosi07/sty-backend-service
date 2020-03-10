@@ -3,7 +3,7 @@ package com.railroad.rest.user;
 import com.railroad.entity.Reservation;
 import com.railroad.entity.User;
 import com.railroad.entity.UserRating;
-import com.railroad.entity.serviceProvided.ServiceProvided;
+import com.railroad.entity.ServiceProvided;
 import com.railroad.rest.common.AbstractService;
 
 import javax.ejb.Stateless;

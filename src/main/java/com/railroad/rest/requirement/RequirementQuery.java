@@ -1,15 +1,13 @@
 package com.railroad.rest.requirement;
 
-import com.railroad.entity.User;
-import com.railroad.entity.requirement.Requirement;
-import com.railroad.entity.serviceProvided.ServiceProvided;
+import com.railroad.entity.Requirement;
+import com.railroad.entity.ServiceProvided;
 
 import javax.inject.Inject;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.Collection;
-import java.util.Optional;
 
 @Transactional
 class RequirementQuery {

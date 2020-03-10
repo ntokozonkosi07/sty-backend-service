@@ -1,8 +1,8 @@
 package com.railroad.rest.serviceProvided;
 
 import com.railroad.entity.User;
-import com.railroad.entity.requirement.Requirement;
-import com.railroad.entity.serviceProvided.ServiceProvided;
+import com.railroad.entity.Requirement;
+import com.railroad.entity.ServiceProvided;
 import com.railroad.rest.common.AbstractService;
 
 import javax.ejb.Stateless;

@@ -3,7 +3,7 @@ package com.railroad.rest.serviceProvided;
 import com.railroad.common.annotation.Log;
 import com.railroad.entity.AbstractEntity;
 import com.railroad.entity.adapters.EntityAdapter;
-import com.railroad.entity.serviceProvided.ServiceProvided;
+import com.railroad.entity.ServiceProvided;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;

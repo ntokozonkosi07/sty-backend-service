@@ -1,11 +1,8 @@
 package com.railroad.entity;
 
-import com.railroad.entity.serviceProvided.ServiceProvided;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Collection;
 
 @Entity
 @Table(name = "S_RESERVATION")

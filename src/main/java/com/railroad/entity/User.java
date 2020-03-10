@@ -1,6 +1,7 @@
 package com.railroad.entity;
 
-import com.railroad.entity.serviceProvided.ServiceProvided;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.json.bind.annotation.JsonbProperty;
 import javax.persistence.*;
@@ -28,91 +29,48 @@ public class User extends AbstractEntity {
     public static final String FIND_USER_RESERVATIONS_BY_ID = "user.findUserReservationsByUserId";
     public static final String FIND_USER_SERVICES_PROVIDED_BY_ID = "user.findUserServicesProvidedByUserId";
 
+    @Getter @Setter
     @NotEmpty(message = "cannot leave name empty")
     private String name;
 
+    @Getter @Setter
     @NotEmpty(message = "lastName cannot be empty")
     private String lastName;
 
+    @Getter @Setter
     @Email
     @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "malformed email address")
     @NotNull(message = "email cannot be null")
     @Column(unique = true)
     private String email;
 
+    @Getter @Setter
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @JsonbProperty(nillable=true)
     private byte[] picture;
 
+    @Getter @Setter
     @OneToMany(mappedBy = "user")
     @JsonbProperty(nillable=true)
     private Collection<UserRating> userRatings;
 
+    @Getter @Setter
     @OneToMany(mappedBy = "artist")
     @JsonbProperty(nillable=true)
     private Collection<Reservation> reservation;
 
+    @Getter @Setter
     @ManyToMany
     @JoinTable(
             joinColumns = @JoinColumn(name = "USER_ID"),
             inverseJoinColumns = @JoinColumn(name = "SERVICE_ID")
     )
+    @JsonbProperty(nillable=true)
     private Collection<ServiceProvided> serviceProvided;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public byte[] getPicture() {
-        return picture;
-    }
-
-    public void setPicture(byte[] picture) {
-        this.picture = picture;
-    }
-
-    public Collection<UserRating> getUserRatings() {
-        return userRatings;
-    }
-
-    public void setUserRatings(Collection<UserRating> userRatings) {
-        this.userRatings = userRatings;
-    }
-
-    public Collection<Reservation> getReservation() {
-        return reservation;
-    }
-
-    public void setReservation(Collection<Reservation> reservation) {
-        this.reservation = reservation;
-    }
-
-    public Collection<ServiceProvided> getServiceProvided() {
-        return serviceProvided;
-    }
-
-    public void setServiceProvided(Collection<ServiceProvided> serviceProvided) {
-        this.serviceProvided = serviceProvided;
-    }
+    @Getter @Setter
+    @OneToMany(mappedBy = "user")
+    @JsonbProperty(nillable=true)
+    private Collection<UserRole> roles;
 }
