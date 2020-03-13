@@ -105,6 +105,19 @@ public class UserRest {
                 });
                 JsonArray servicesProvided = servicesProvidedBuilder.build();
 
+                JsonArrayBuilder rolesBuilder = Json.createArrayBuilder();
+                ((User)obj).setUserRoles(userService.finRolesByUserId(obj.getId(), 10,  Optional.of(0)));
+
+                ((User)obj).getUserRoles().forEach(r ->{
+                    JsonObject role = Json.createObjectBuilder().
+                            add("id",r.getRole().getId()).
+                            add("name", r.getRole().getName()).
+                            build();
+
+                    rolesBuilder.add(role);
+                });
+                JsonArray roles = rolesBuilder.build();
+
                 JsonObject userObj = Json.createObjectBuilder()
                         .add("id", obj.getId())
                         .add("name", ((User)obj).getName())
@@ -114,6 +127,7 @@ public class UserRest {
                         .add("userRatings", ratingsArr)
                         .add("reservation", reservationArray)
                         .add("servicesProvided", servicesProvided)
+                        .add("roles", roles)
                         .build();
 
                 return userObj;
@@ -129,8 +143,11 @@ public class UserRest {
     }
 
     @Path("/") @GET
-    public Response getUsers(){
-        Collection<?> users = userService.getUsers(10, java.util.Optional.of(0));
+    public Response getUsers(
+            @QueryParam("maxResults") @DefaultValue("10") int maxResults,
+            @QueryParam("maxResults") @DefaultValue("0") int firstResults
+        ){
+        Collection<?> users = userService.getUsers(maxResults, java.util.Optional.of(firstResults));
 
         return Response.ok(jsonb.toJson(users)).build();
     }

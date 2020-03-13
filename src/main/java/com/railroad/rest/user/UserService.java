@@ -1,9 +1,6 @@
 package com.railroad.rest.user;
 
-import com.railroad.entity.Reservation;
-import com.railroad.entity.User;
-import com.railroad.entity.UserRating;
-import com.railroad.entity.ServiceProvided;
+import com.railroad.entity.*;
 import com.railroad.rest.common.AbstractService;
 
 import javax.ejb.Stateless;
@@ -66,5 +63,10 @@ public class UserService extends AbstractService  {
     public Collection<ServiceProvided> findServicesProvidedById(Long id, Integer maxResults, Optional<Integer> firstResults) {
         Integer firstRes = this.parameterValidation(maxResults, firstResults);
         return query.findServicesProvidedById(id,maxResults, firstRes);
+    }
+
+    public Collection<UserRole> finRolesByUserId(Long id, int maxResults, Optional<Integer> firstResults) {
+        Integer firstRes = this.parameterValidation(maxResults, firstResults);
+        return query.finRolesByUserId(id,maxResults, firstRes);
     }
 }

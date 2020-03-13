@@ -1,9 +1,6 @@
 package com.railroad.rest.user;
 
-import com.railroad.entity.Reservation;
-import com.railroad.entity.User;
-import com.railroad.entity.UserRating;
-import com.railroad.entity.ServiceProvided;
+import com.railroad.entity.*;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -75,4 +72,11 @@ class UserQuery {
                 .getResultList();
     }
 
+    public Collection<UserRole> finRolesByUserId(Long id, int maxResults, Integer firstRes) {
+        return entityManager.createNamedQuery(User.FIND_ROLE_BY_USER_ID, UserRole.class)
+                .setParameter("id",id)
+                .setMaxResults(maxResults)
+                .setFirstResult(firstRes)
+                .getResultList();
+    }
 }
