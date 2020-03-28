@@ -35,7 +35,7 @@ public class ServicesProvidedRest {
             @Override
             public JsonObject adaptToJson(AbstractEntity obj) throws Exception {
                 ((ServiceProvided)obj).setRequirements(serviceProv.getServiceProvidedRequirements(obj.getId(),10, Optional.of(0)));
-                ((ServiceProvided)obj).setArtists(serviceProv.getServiceProvidedArtists(obj.getId(),10, Optional.of(0)));
+                ((ServiceProvided)obj).setArtists(serviceProv.getServiceProvidedArtists(obj.getId(),10, 0));
 
 
                 JsonArrayBuilder jsonReqArrBuilder = Json.createArrayBuilder();
@@ -97,7 +97,7 @@ public class ServicesProvidedRest {
     @GET @Path("/")
     public Response getSerivceProvided(
             @QueryParam("maxResults") @DefaultValue(value = "10") Integer maxResults,
-            @QueryParam("startIndex") @DefaultValue(value = "0") Optional<Integer> firstResults
+            @QueryParam("startIndex") @DefaultValue(value = "0") Integer firstResults
     ){
         Collection<ServiceProvided> servs = serviceProv.getSerivcesProvided(maxResults,firstResults);
 

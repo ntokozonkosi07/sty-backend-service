@@ -8,6 +8,7 @@ import com.railroad.configuration.config;
 import com.railroad.entity.User;
 import com.railroad.entity.Requirement;
 import com.railroad.entity.ServiceProvided;
+import com.railroad.entity.reservation.Reservation;
 import com.railroad.rest.common.AbstractService;
 import com.railroad.rest.common.HttpUtils;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
@@ -51,6 +52,7 @@ public class ServiceProvidedTest {
                 .addPackage(User.class.getPackage())
                 .addPackage(EntityManagerProducer.class.getPackage())
                 .addPackage(LoggingFilter.class.getPackage())
+                .addPackage(Reservation.class.getPackage())
                 .addClasses(AbstractService.class, ServiceProvided.class, Requirement.class,com.railroad.entity.adapters.EntityAdapter.class, EntityAdapter.class, config.class)
                 .addPackage(CustomExceptionMapperQualifier.class.getPackage())
                 .addAsResource("persistence.xml", "META-INF/persistence.xml")
@@ -145,7 +147,7 @@ public class ServiceProvidedTest {
                         artist.setEmail(((JsonString)((JsonObject)a).get("email")).getString());
                         artist.setPicture(null);
                         artist.setUserRatings(new ArrayList<>());
-                        artist.setReservation(new ArrayList<>());
+                        artist.setReservations(new ArrayList<>());
 
                         artists.add(artist);
                     });

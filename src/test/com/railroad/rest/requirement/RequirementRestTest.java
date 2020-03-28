@@ -8,6 +8,7 @@ import com.railroad.configuration.config;
 import com.railroad.entity.User;
 import com.railroad.entity.Requirement;
 import com.railroad.entity.ServiceProvided;
+import com.railroad.entity.reservation.Reservation;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -50,7 +51,8 @@ public class RequirementRestTest {
                 .addPackage(User.class.getPackage())
                 .addPackage(EntityManagerProducer.class.getPackage())
                 .addPackage(LoggingFilter.class.getPackage())
-                .addClasses(ServiceProvided.class, Requirement.class,com.railroad.entity.adapters.EntityAdapter.class,EntityAdapter.class,config.class)
+                .addPackage(Reservation.class.getPackage())
+                .addClasses(Requirement.class,com.railroad.entity.adapters.EntityAdapter.class,EntityAdapter.class,config.class)
                 .addPackage(CustomExceptionMapperQualifier.class.getPackage())
                 .addAsResource("persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");

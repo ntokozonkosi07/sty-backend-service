@@ -1,8 +1,7 @@
 package com.railroad.entity;
 
+import com.railroad.entity.reservation.Reservation;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.json.bind.annotation.JsonbProperty;
 import javax.persistence.*;
@@ -48,13 +47,13 @@ public class User extends AbstractEntity {
     @JsonbProperty(nillable=true)
     private byte[] picture;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "rater")
     @JsonbProperty(nillable=true)
     private Collection<UserRating> userRatings;
 
     @OneToMany(mappedBy = "artist")
     @JsonbProperty(nillable=true)
-    private Collection<Reservation> reservation;
+    private Collection<Reservation> reservations;
 
     @ManyToMany
     @JoinTable(

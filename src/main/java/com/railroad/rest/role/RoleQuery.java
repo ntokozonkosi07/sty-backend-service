@@ -12,6 +12,10 @@ import java.util.Collection;
 @Transactional
 public class RoleQuery extends Repository<Role> {
 
+    public RoleQuery() {
+        super(Role.class);
+    }
+
     @Override
     public Collection<Role> findAll(int maxResults, int firstResults) throws IllegalArgumentException {
         return em.createNamedQuery(Role.FIND_ALL_ROLES,Role.class)

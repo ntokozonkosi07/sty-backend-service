@@ -1,6 +1,7 @@
 package com.railroad.rest.user;
 
 import com.railroad.entity.*;
+import com.railroad.entity.reservation.Reservation;
 import com.railroad.rest.common.AbstractService;
 
 import javax.ejb.Stateless;
@@ -19,13 +20,13 @@ public class UserService extends AbstractService  {
     public Collection<User> getUsers(Integer maxResults, Optional<Integer> firstResults){
         Integer firstRes = this.parameterValidation(maxResults, firstResults);
 
-        return query.getUsers(maxResults,firstRes);
+        return query.findAll(maxResults,firstRes);
     }
     
     public User createUser(User user) throws ConstraintViolationException {
         try {
             if (user.getId() == null) {
-                return query.createUser(user);
+                return query.save(user);
             }
 
             return user;
@@ -38,33 +39,29 @@ public class UserService extends AbstractService  {
 
 	public User findUserById(@NotNull Long id) {
 		
-		return query.findUserById(id);
+		return query.findById(id);
 	}
 
 	public User updateUser(@NotNull User user) {
-        return query.updateUser(user);
+        return query.update(user);
     }
 
-    public User findCollectionById(Long id){
-        return query.findUserById(id);
-    }
-
-    public Collection<UserRating> findUserRatingsById(@NotNull Long id, Integer maxResults, Optional<Integer> firstResults){
-        Integer firstRes = this.parameterValidation(maxResults, firstResults);
-
-        return query.findUserRatingsById(id,maxResults, firstRes);
-    }
-
-    public Collection<Reservation> findReservationsById(Long id, Integer maxResults, Optional<Integer> firstResults) {
-        Integer firstRes = this.parameterValidation(maxResults, firstResults);
-        return query.findReservationsById(id,maxResults, firstRes);
-    }
-
-    public Collection<ServiceProvided> findServicesProvidedById(Long id, Integer maxResults, Optional<Integer> firstResults) {
-        Integer firstRes = this.parameterValidation(maxResults, firstResults);
-        return query.findServicesProvidedById(id,maxResults, firstRes);
-    }
-
+//    public Collection<UserRating> findUserRatingsById(@NotNull Long id, Integer maxResults, Optional<Integer> firstResults){
+//        Integer firstRes = this.parameterValidation(maxResults, firstResults);
+//
+//        return query.findUserRatingsById(id,maxResults, firstRes);
+//    }
+//
+//    public Collection<Reservation> findReservationsById(Long id, Integer maxResults, Optional<Integer> firstResults) {
+//        Integer firstRes = this.parameterValidation(maxResults, firstResults);
+//        return query.findReservationsById(id,maxResults, firstRes);
+//    }
+//
+//    public Collection<ServiceProvided> findServicesProvidedById(Long id, Integer maxResults, Optional<Integer> firstResults) {
+//        Integer firstRes = this.parameterValidation(maxResults, firstResults);
+//        return query.findServicesProvidedById(id,maxResults, firstRes);
+//    }
+//
     public Collection<UserRole> finRolesByUserId(Long id, int maxResults, Optional<Integer> firstResults) {
         Integer firstRes = this.parameterValidation(maxResults, firstResults);
         return query.finRolesByUserId(id,maxResults, firstRes);

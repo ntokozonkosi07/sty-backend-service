@@ -16,10 +16,9 @@ public class ServiceProvidedService extends AbstractService {
     private ServiceProvidedQuery sq;
 
 
-    public Collection<ServiceProvided> getSerivcesProvided(Integer maxResults, Optional<Integer> firstResults) throws IllegalArgumentException{
-        Integer firstRes = parameterValidation(maxResults,firstResults);
+    public Collection<ServiceProvided> getSerivcesProvided(Integer maxResults, Integer firstResults) throws IllegalArgumentException{
 
-        return sq.getSerivcesProvided(maxResults,firstRes);
+        return sq.getSerivcesProvided(maxResults,firstResults);
     }
 
     public ServiceProvided saveServiceProvided(ServiceProvided serviceProvided) {
@@ -32,10 +31,9 @@ public class ServiceProvidedService extends AbstractService {
         return sq.getServiceProvidedRequirements(id,maxResults,firstRes);
     }
 
-    public Collection<User> getServiceProvidedArtists(Long id, Integer maxResults, Optional<Integer> firstResults)throws IllegalArgumentException {
-        Integer firstRes = parameterValidation(maxResults,firstResults);
+    public Collection<User> getServiceProvidedArtists(Long id, Integer maxResults, Integer firstResults)throws IllegalArgumentException {
 
-        return sq.getServiceProvidedArtists(id, maxResults,firstRes);
+        return sq.getServiceProvidedArtists(id, maxResults,firstResults);
     }
 
 

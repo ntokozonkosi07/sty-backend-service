@@ -5,14 +5,11 @@ import com.railroad.common.entityAdapters.EntityAdapter;
 import com.railroad.common.filters.LoggingFilter;
 import com.railroad.common.producers.EntityManagerProducer;
 import com.railroad.configuration.config;
-import com.railroad.entity.Requirement;
 import com.railroad.entity.Role;
-import com.railroad.entity.ServiceProvided;
-import com.railroad.entity.User;
+import com.railroad.entity.reservation.Reservation;
 import com.railroad.rest.common.AbstractService;
 import com.railroad.rest.common.HttpUtils;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
-import com.railroad.rest.serviceProvided.ServicesProvidedRest;
 import lombok.Cleanup;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -28,12 +25,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.json.*;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
-import javax.json.bind.JsonbConfig;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -50,6 +44,7 @@ public class RoleTest {
                 .addPackage(Role.class.getPackage())
                 .addPackage(EntityManagerProducer.class.getPackage())
                 .addPackage(LoggingFilter.class.getPackage())
+                .addPackage(Reservation.class.getPackage())
                 .addPackage(AbstractService.class.getPackage())
                 .addClasses(com.railroad.entity.adapters.EntityAdapter.class, EntityAdapter.class, config.class)
                 .addPackage(CustomExceptionMapperQualifier.class.getPackage())

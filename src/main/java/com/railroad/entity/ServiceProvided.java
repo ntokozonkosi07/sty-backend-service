@@ -1,5 +1,7 @@
 package com.railroad.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -8,6 +10,7 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "S_SERVICE")
+@Data
 @NamedQuery(name = ServiceProvided.FIND_ALL_SERVICE_PROVIDED, query = "SELECT s FROM ServiceProvided s")
 @NamedQuery(name = ServiceProvided.FIND_ALL_SERVICE_PROVIDED_REQUIREMENTS, query = "SELECT r FROM ServiceProvided s INNER JOIN s.requirements r WHERE s.Id = :id")
 @NamedQuery(name = ServiceProvided.FIND_ALL_SERVICE_PROVIDED_ARTISTS, query = "SELECT a FROM ServiceProvided s INNER JOIN s.artists a WHERE s.Id = :id")
@@ -61,36 +64,4 @@ public class ServiceProvided extends AbstractEntity {
 
     @Min(value = 0, message = "price cannot be less than 0")
     private double price;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Collection<Requirement> getRequirements() {
-        return requirements;
-    }
-
-    public void setRequirements(Collection<Requirement> requirements) {
-        this.requirements = requirements;
-    }
-
-    public Collection<User> getArtists() {
-        return artists;
-    }
-
-    public void setArtists(Collection<User> artists) {
-        this.artists = artists;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
 }

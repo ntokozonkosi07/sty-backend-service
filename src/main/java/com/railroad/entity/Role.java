@@ -21,6 +21,4 @@ public class Role extends AbstractEntity {
     @Column(unique = true, nullable = false)
     @NonNull
     private String name;
-
-
 }

@@ -18,6 +18,9 @@ import com.railroad.entity.User;
 import com.railroad.entity.adapters.EntityAdapter;
 import com.railroad.entity.ServiceProvided;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
+import com.railroad.rest.reservation.ReservationService;
+import com.railroad.rest.serviceProvided.ServiceProvidedService;
+import com.railroad.rest.userRating.UserRatingService;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -28,8 +31,11 @@ import java.util.Optional;
 @Produces(MediaType.APPLICATION_JSON)
 public class UserRest {
 
-    @Inject
-    UserService userService;
+    @Inject private UserService userService;
+    @Inject private UserRatingService urs;
+    @Inject private ReservationService rs;
+    @Inject private ServiceProvidedService sps;
+
     private Jsonb jsonb;
 
     @PostConstruct
@@ -39,20 +45,20 @@ public class UserRest {
             public JsonObject adaptToJson(AbstractEntity obj) throws Exception {
 
                 JsonArrayBuilder userRatingBuilder = Json.createArrayBuilder();
-                ((User)obj).setUserRatings(userService.findUserRatingsById(obj.getId(), 10, Optional.of(0)));
+                ((User)obj).setUserRatings(urs.getUserRatingsByUserId(obj.getId(), 10, 0));
 
                 ((User)obj).getUserRatings().forEach(r -> {
                     JsonObject userJsonObj = Json.createObjectBuilder()
-                            .add("id", r.getUser().getId())
-                            .add("name", r.getUser().getName())
-                            .add("lastName", r.getUser().getLastName())
-                            .add("picture", r.getUser().getPicture().toString())
+                            .add("id", r.getRatee().getId())
+                            .add("name", r.getRatee().getName())
+                            .add("lastName", r.getRatee().getLastName())
+                            .add("picture", r.getRatee().getPicture().toString())
                             .build();
 
                     JsonObject userRating = Json.createObjectBuilder()
-                            .add("id",r.getUserRating().getId())
-                            .add("rateValue",r.getUserRating().getRateValue())
-                            .add("comment",r.getUserRating().getComment())
+                            .add("id",r.getRating().getId())
+                            .add("rateValue",r.getRating().getRateValue())
+                            .add("comment",r.getRating().getComment())
                             .build();
 
                     JsonObject ratingJsonObj = Json.createObjectBuilder()
@@ -65,9 +71,9 @@ public class UserRest {
                 JsonArray ratingsArr = userRatingBuilder.build();
 
                 JsonArrayBuilder reservationBuilder = Json.createArrayBuilder();
-                ((User)obj).setReservation(userService.findReservationsById(obj.getId(), 10, Optional.of(0)));
+                ((User)obj).setReservations(rs.findReservationsByClientId(obj.getId(),10,0 ));
 
-                ((User)obj).getReservation().forEach(r -> {
+                ((User)obj).getReservations().forEach(r -> {
                     JsonObject artistJsonObj = Json.createObjectBuilder()
                             .add("id", r.getArtist().getId())
                             .add("name", r.getArtist().getName())
@@ -93,7 +99,7 @@ public class UserRest {
                 JsonArray reservationArray = reservationBuilder.build();
 
                 JsonArrayBuilder servicesProvidedBuilder = Json.createArrayBuilder();
-                ((User)obj).setServiceProvided(userService.findServicesProvidedById(obj.getId(),10, Optional.of(0)));
+                ((User)obj).setServiceProvided(sps.getSerivcesProvided(10, 0));
 
                 ((User)obj).getServiceProvided().forEach(s ->{
                     JsonObject serviceProvided = Json.createObjectBuilder().
