@@ -12,8 +12,7 @@ public class RoleService extends AbstractService {
     @Inject RoleQuery rq;
 
     public Collection<Role> findAll(int maxResults, int firstResults){
-        int firsRes = parameterValidation(maxResults, java.util.Optional.of(firstResults));
-        return rq.findAll(maxResults,firsRes);
+        return rq.findAll(maxResults,firstResults);
     }
 
     public Role findById(Long id){

@@ -8,10 +8,17 @@ import com.railroad.configuration.config;
 import com.railroad.entity.User;
 import com.railroad.entity.Requirement;
 import com.railroad.entity.ServiceProvided;
+import com.railroad.entity.UserRating;
 import com.railroad.entity.reservation.Reservation;
 import com.railroad.rest.common.AbstractService;
 import com.railroad.rest.common.HttpUtils;
+import com.railroad.rest.common.Repository;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
+import com.railroad.rest.requirement.RequirementService;
+import com.railroad.rest.reservation.ReservationService;
+import com.railroad.rest.user.UserService;
+import com.railroad.rest.userRating.UserRatingService;
+import com.railroad.rest.userRoles.UserRoleService;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -53,7 +60,14 @@ public class ServiceProvidedTest {
                 .addPackage(EntityManagerProducer.class.getPackage())
                 .addPackage(LoggingFilter.class.getPackage())
                 .addPackage(Reservation.class.getPackage())
-                .addClasses(AbstractService.class, ServiceProvided.class, Requirement.class,com.railroad.entity.adapters.EntityAdapter.class, EntityAdapter.class, config.class)
+                .addPackage(ServiceProvidedService.class.getPackage())
+                .addPackage(Repository.class.getPackage())
+                .addPackage(RequirementService.class.getPackage())
+                .addPackage(UserService.class.getPackage())
+                .addPackage(UserRatingService.class.getPackage())
+                .addPackage(ReservationService.class.getPackage())
+                .addPackage(UserRoleService.class.getPackage())
+                .addClasses(ServiceProvided.class, Requirement.class,com.railroad.entity.adapters.EntityAdapter.class, EntityAdapter.class, config.class)
                 .addPackage(CustomExceptionMapperQualifier.class.getPackage())
                 .addAsResource("persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");

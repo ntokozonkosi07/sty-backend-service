@@ -15,17 +15,12 @@ public class RoleQuery extends Repository<Role> {
 
     @Override
     public Collection<Role> findAll(int maxResults, int firstResults) throws IllegalArgumentException {
-        return em.createNamedQuery(Role.FIND_ALL_ROLES,Role.class)
-                .setMaxResults(maxResults)
-                .setFirstResult(firstResults)
-                .getResultList();
+        return this.getCollectionResults(maxResults,firstResults, Role.FIND_ALL_ROLES);
     }
 
     @Override
     public Role findById(Long id) throws IllegalArgumentException {
-        return em.createNamedQuery(Role.FIND_ROLE_BY_ID,Role.class)
-                .setParameter("id", id)
-                .getSingleResult();
+        return this.getSingleResults(new HashMap<String, Long>(){{ put("id", Long.valueOf(id)); }}, Role.FIND_ROLE_BY_ID);
     }
 
     public Collection<Role> findRolesByUserId(Long userId, int maxResults, int firstResults){

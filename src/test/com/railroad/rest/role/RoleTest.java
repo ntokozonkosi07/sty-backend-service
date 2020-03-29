@@ -27,6 +27,7 @@ import org.junit.runner.RunWith;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
+import javax.json.bind.JsonbConfig;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -61,7 +62,9 @@ public class RoleTest {
         this.http = new HttpUtils();
         this.url = "http://localhost:8080/style-beat/api/v1/role";
 
-        this.jsonb = JsonbBuilder.create();
+        JsonbConfig config = new JsonbConfig().withAdapters(new RoleMashaler());
+
+        this.jsonb = JsonbBuilder.create(config);
     }
 
     @Test @InSequence(1) @RunAsClient
@@ -100,7 +103,9 @@ public class RoleTest {
     public void should_find_list_of_roles() throws IOException {
         @Cleanup() CloseableHttpResponse response = http.get(url);
         HttpEntity entity = response.getEntity();
-        Collection<Role> roles = jsonb.fromJson(EntityUtils.toString(entity), new ArrayList<Role>(){}.getClass().getGenericSuperclass());
+//        Collection<Role> roles = jsonb.fromJson(EntityUtils.toString(entity), new ArrayList<Role>(){}.getClass().getGenericSuperclass());
+        String json = EntityUtils.toString(entity);
+        Collection<Role> roles = jsonb.fromJson(json, new ArrayList(){}.getClass().getGenericSuperclass());
 
         assertEquals(200, response.getStatusLine().getStatusCode());
         assertEquals(1, roles.size());
@@ -125,7 +130,9 @@ public class RoleTest {
         @Cleanup() CloseableHttpResponse response = http.get(url+"/1");
         HttpEntity entity = response.getEntity();
 
-        Role roleOut = jsonb.fromJson(EntityUtils.toString(entity),Role.class);
+        String json = EntityUtils.toString(entity);
+
+        Role roleOut = this.jsonb.fromJson(json,Role.class);
 
         assertNotNull(roleOut);
     }
