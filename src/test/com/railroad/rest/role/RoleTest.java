@@ -105,7 +105,7 @@ public class RoleTest {
         HttpEntity entity = response.getEntity();
 //        Collection<Role> roles = jsonb.fromJson(EntityUtils.toString(entity), new ArrayList<Role>(){}.getClass().getGenericSuperclass());
         String json = EntityUtils.toString(entity);
-        Collection<Role> roles = jsonb.fromJson(json, new ArrayList(){}.getClass().getGenericSuperclass());
+        Collection<Role> roles = jsonb.fromJson(json, ArrayList.class);
 
         assertEquals(200, response.getStatusLine().getStatusCode());
         assertEquals(1, roles.size());
