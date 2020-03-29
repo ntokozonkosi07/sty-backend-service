@@ -62,8 +62,8 @@ public class UserService extends AbstractService  {
 //        return query.findServicesProvidedById(id,maxResults, firstRes);
 //    }
 //
-    public Collection<UserRole> finRolesByUserId(Long id, int maxResults, Optional<Integer> firstResults) {
-        Integer firstRes = this.parameterValidation(maxResults, firstResults);
-        return query.finRolesByUserId(id,maxResults, firstRes);
+
+    public Collection<User> findArtistByServiceProvidedId(Long id, int maxResults, int firstResults){
+        return query.findArtistByServiceProvidedId(id,maxResults,firstResults);
     }
 }

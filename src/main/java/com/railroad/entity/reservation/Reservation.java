@@ -4,8 +4,10 @@ import com.railroad.entity.*;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -36,10 +38,12 @@ public class Reservation extends AbstractEntity {
     private User artist;
 
     @NotNull
-    private LocalDateTime datTimeFrom;
+    @FutureOrPresent(message = "Appointment date cannot be in the past")
+    private LocalDateTime startDateTimeStart;
 
     @NotNull
-    private LocalDateTime datTimeTo;
+    @Setter(AccessLevel.PRIVATE)
+    private LocalDateTime endDateTimeStart;
 
     private ReservationState status;
 
@@ -52,6 +56,7 @@ public class Reservation extends AbstractEntity {
 
     @PrePersist
     public void init(){
+        this.setEndDateTimeStart(LocalDateTime.of(2020,06,10,10,00,00));
         this.status = ReservationState.PENDING;
     }
 }

@@ -33,21 +33,7 @@ class UserQuery extends Repository<User> {
         return getCollectionResults(new HashMap<String, Object>(){{ put("id", Long.valueOf(id)); }}, maxResults, firstResults, User.FIND_USER_RESERVATIONS_BY_ID);
     }
 
-    public Collection<ServiceProvided> findServicesProvidedById(Long id, Integer maxResults, Integer firstResults) {
-        return em.createNamedQuery(User.FIND_USER_SERVICES_PROVIDED_BY_ID)
-                .setParameter("id", id)
-                .setMaxResults(maxResults)
-                .setFirstResult(firstResults)
-                .getResultList();
+    public Collection<User> findArtistByServiceProvidedId(Long id, int maxResults, Integer firstResults){
+        return getCollectionResults(new HashMap<String, Object>(){{ put("id", Long.valueOf(id)); }}, maxResults, firstResults, User.FIND_ARTIST_BY_SERVICE_PROVIDED_ID);
     }
-
-    public Collection<UserRole> finRolesByUserId(Long id, int maxResults, Integer firstResults) {
-//        return getCollectionResults(new HashMap<String, Object>(){{ put("id", Long.valueOf(id)); }}, maxResults,firstResults, User.FIND_USER_SERVICES_PROVIDED_BY_ID);
-        return em.createNamedQuery(User.FIND_ROLE_BY_USER_ID)
-                .setParameter("id", id)
-                .setMaxResults(maxResults)
-                .setFirstResult(firstResults)
-                .getResultList();
-    }
-
 }

@@ -31,4 +31,8 @@ public class RoleService extends AbstractService {
     public void delete(Long id){
         rq.delete(id);
     }
+
+    public Collection<Role> findRolesByUserId(Long userId, int maxResults, int firstResults){
+        return rq.findRolesByUserId(userId, maxResults, firstResults);
+    }
 }

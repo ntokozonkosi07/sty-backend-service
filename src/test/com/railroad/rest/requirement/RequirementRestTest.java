@@ -9,7 +9,13 @@ import com.railroad.entity.User;
 import com.railroad.entity.Requirement;
 import com.railroad.entity.ServiceProvided;
 import com.railroad.entity.reservation.Reservation;
+import com.railroad.rest.common.Repository;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
+import com.railroad.rest.reservation.ReservationService;
+import com.railroad.rest.serviceProvided.ServiceProvidedService;
+import com.railroad.rest.user.UserService;
+import com.railroad.rest.userRating.UserRatingService;
+import com.railroad.rest.userRoles.UserRoleService;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -52,6 +58,13 @@ public class RequirementRestTest {
                 .addPackage(EntityManagerProducer.class.getPackage())
                 .addPackage(LoggingFilter.class.getPackage())
                 .addPackage(Reservation.class.getPackage())
+                .addPackage(RequirementQuery.class.getPackage())
+                .addPackage(Repository.class.getPackage())
+                .addPackage(ServiceProvidedService.class.getPackage())
+                .addPackage(UserService.class.getPackage())
+                .addPackage(UserRatingService.class.getPackage())
+                .addPackage(ReservationService.class.getPackage())
+                .addPackage(UserRoleService.class.getPackage())
                 .addClasses(Requirement.class,com.railroad.entity.adapters.EntityAdapter.class,EntityAdapter.class,config.class)
                 .addPackage(CustomExceptionMapperQualifier.class.getPackage())
                 .addAsResource("persistence.xml", "META-INF/persistence.xml")

@@ -4,6 +4,8 @@ import com.railroad.common.annotation.Log;
 import com.railroad.entity.AbstractEntity;
 import com.railroad.entity.adapters.EntityAdapter;
 import com.railroad.entity.ServiceProvided;
+import com.railroad.rest.requirement.RequirementService;
+import com.railroad.rest.user.UserService;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -16,7 +18,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
-import java.util.Optional;
 
 @Log
 @Path("/services-provided")
@@ -24,8 +25,9 @@ import java.util.Optional;
 @Produces(MediaType.APPLICATION_JSON)
 public class ServicesProvidedRest {
 
-    @Inject
-    ServiceProvidedService serviceProv;
+    @Inject private ServiceProvidedService serviceProv;
+    @Inject private RequirementService reqService;
+    @Inject private UserService userService;
 
     private Jsonb jsonb;
 
@@ -34,8 +36,8 @@ public class ServicesProvidedRest {
         jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new EntityAdapter<ServiceProvided>() {
             @Override
             public JsonObject adaptToJson(AbstractEntity obj) throws Exception {
-                ((ServiceProvided)obj).setRequirements(serviceProv.getServiceProvidedRequirements(obj.getId(),10, Optional.of(0)));
-                ((ServiceProvided)obj).setArtists(serviceProv.getServiceProvidedArtists(obj.getId(),10, 0));
+                ((ServiceProvided)obj).setRequirements(reqService.findRequirementsByServiceProvidedId(obj.getId(), 10, 0));
+                ((ServiceProvided)obj).setArtists(userService.findArtistByServiceProvidedId(obj.getId(),10, 0));
 
 
                 JsonArrayBuilder jsonReqArrBuilder = Json.createArrayBuilder();
@@ -112,14 +114,14 @@ public class ServicesProvidedRest {
 
     @GET @Path("/{id}")
     public Response getServiceProvided(@PathParam("id") @DefaultValue(value = "0") Long id){
-        ServiceProvided servProd = serviceProv.getServicesProvided(id);
+        ServiceProvided servProd = serviceProv.findById(id);
 
         return Response.ok(jsonb.toJson(servProd)).build();
     }
 
     @PUT @Path("/")
     public Response updateServiceProvided(@Valid ServiceProvided service){
-        ServiceProvided serv = serviceProv.updateServiceProvided(service);
+        ServiceProvided serv = serviceProv.update(service);
         return Response.ok(jsonb.toJson(serv)).build();
     }
 }

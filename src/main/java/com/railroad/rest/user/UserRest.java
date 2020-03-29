@@ -21,9 +21,9 @@ import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
 import com.railroad.rest.reservation.ReservationService;
 import com.railroad.rest.serviceProvided.ServiceProvidedService;
 import com.railroad.rest.userRating.UserRatingService;
+import com.railroad.rest.userRoles.UserRoleService;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @Log
 @Path("/users")
@@ -35,6 +35,7 @@ public class UserRest {
     @Inject private UserRatingService urs;
     @Inject private ReservationService rs;
     @Inject private ServiceProvidedService sps;
+    @Inject private UserRoleService userRoleService;
 
     private Jsonb jsonb;
 
@@ -90,8 +91,8 @@ public class UserRest {
                     JsonObject ratingObj = Json.createObjectBuilder()
                             .add("id",r.getId())
                             .add("status",r.getStatus().toString())
-                            .add("datTimeFrom",r.getDatTimeFrom().toString())
-                            .add("datTimeTo",r.getDatTimeTo().toString())
+                            .add("startDateTime",r.getStartDateTimeStart().toString())
+                            .add("endDateTime",r.getEndDateTimeStart().toString())
                             .add("artist",artistJsonObj)
                             .add("servicesProvided",serviceProvidedJsonObj)
                             .build();
@@ -99,10 +100,11 @@ public class UserRest {
                 JsonArray reservationArray = reservationBuilder.build();
 
                 JsonArrayBuilder servicesProvidedBuilder = Json.createArrayBuilder();
-                ((User)obj).setServiceProvided(sps.getSerivcesProvided(10, 0));
+                ((User)obj).setServicesProvided(sps.getServiceProvidedByArtistId(obj.getId(),10, 0));
 
-                ((User)obj).getServiceProvided().forEach(s ->{
+                ((User)obj).getServicesProvided().forEach(s ->{
                     JsonObject serviceProvided = Json.createObjectBuilder().
+                            add("id", s.getId()).
                             add("name", s.getName()).
                             add("price", s.getPrice()).
                             build();
@@ -112,7 +114,7 @@ public class UserRest {
                 JsonArray servicesProvided = servicesProvidedBuilder.build();
 
                 JsonArrayBuilder rolesBuilder = Json.createArrayBuilder();
-                ((User)obj).setUserRoles(userService.finRolesByUserId(obj.getId(), 10,  Optional.of(0)));
+                ((User)obj).setUserRoles(userRoleService.findUserRolesByUserId(obj.getId(), 10,  0));
 
                 ((User)obj).getUserRoles().forEach(r ->{
                     JsonObject role = Json.createObjectBuilder().

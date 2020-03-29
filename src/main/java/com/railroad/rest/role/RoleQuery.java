@@ -2,12 +2,9 @@ package com.railroad.rest.role;
 
 import com.railroad.entity.Role;
 import com.railroad.rest.common.Repository;
-
-import javax.inject.Inject;
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.HashMap;
 
 @Transactional
 public class RoleQuery extends Repository<Role> {
@@ -29,5 +26,9 @@ public class RoleQuery extends Repository<Role> {
         return em.createNamedQuery(Role.FIND_ROLE_BY_ID,Role.class)
                 .setParameter("id", id)
                 .getSingleResult();
+    }
+
+    public Collection<Role> findRolesByUserId(Long userId, int maxResults, int firstResults){
+        return this.getCollectionResults(new HashMap<String, Long>(){{ put("id", Long.valueOf(userId)); }}, maxResults, firstResults, Role.FIND_ROLES_BY_USER_ID);
     }
 }

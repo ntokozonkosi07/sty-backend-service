@@ -3,7 +3,10 @@ package com.railroad.entity.reservation;
 import com.railroad.entity.ServiceProvided;
 import com.railroad.entity.User;
 
+import javax.json.bind.annotation.JsonbDateFormat;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.ws.rs.DefaultValue;
 import java.time.LocalDateTime;
 
 public class ReservationDto {
@@ -12,16 +15,15 @@ public class ReservationDto {
     private Long clientId;
 
     @NotNull
-    private User artistId;
+    private Long artistId;
 
     @NotNull
-    private LocalDateTime datTimeFrom;
+    @JsonbDateFormat(value = "dd-MM-yyyy HH:mm:ss")
+    private LocalDateTime startDateTime;
 
-    @NotNull
-    private LocalDateTime datTimeTo;
+    @Size(min=0, max = 140)
+    @DefaultValue(value = "")
+    private String note;
 
-    @NotNull
-    private ReservationState status;
-
-    private ServiceProvided serviceProvided;
+    private Long serviceProvidedId;
 }
