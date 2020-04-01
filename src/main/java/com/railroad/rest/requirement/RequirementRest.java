@@ -1,8 +1,8 @@
 package com.railroad.rest.requirement;
 
 import com.railroad.common.annotation.Log;
+import com.railroad.common.entityAdapters.EntityAdapter;
 import com.railroad.entity.AbstractEntity;
-import com.railroad.entity.adapters.EntityAdapter;
 import com.railroad.entity.Requirement;
 import com.railroad.entity.ServiceProvided;
 import com.railroad.rest.serviceProvided.ServiceProvidedService;
@@ -38,7 +38,7 @@ public class RequirementRest {
         JsonbConfig config = new JsonbConfig().withAdapters(new EntityAdapter<Requirement>(){
 
             @Override
-            public JsonObject adaptToJson(AbstractEntity obj) throws Exception {
+            public JsonObject adaptToJson(Requirement obj) throws Exception {
 
                 JsonObjectBuilder requirementJsonObj = Json.createObjectBuilder();
 
@@ -64,7 +64,7 @@ public class RequirementRest {
             }
 
             @Override
-            public AbstractEntity adaptFromJson(JsonObject obj) throws Exception {
+            public Requirement adaptFromJson(JsonObject obj) throws Exception {
                 return null;
             }
         });

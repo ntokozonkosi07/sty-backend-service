@@ -13,10 +13,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.railroad.common.annotation.Log;
+import com.railroad.common.entityAdapters.EntityAdapter;
 import com.railroad.entity.AbstractEntity;
 import com.railroad.entity.User;
-import com.railroad.entity.adapters.EntityAdapter;
 import com.railroad.entity.ServiceProvided;
+import com.railroad.entity.reservation.Reservation;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
 import com.railroad.rest.reservation.ReservationService;
 import com.railroad.rest.serviceProvided.ServiceProvidedService;
@@ -43,7 +44,7 @@ public class UserRest {
     private void init(){
         JsonbConfig config = new JsonbConfig().withAdapters(new EntityAdapter<User>() {
             @Override
-            public JsonObject adaptToJson(AbstractEntity obj) throws Exception {
+            public JsonObject adaptToJson(User obj) throws Exception {
 
                 JsonArrayBuilder userRatingBuilder = Json.createArrayBuilder();
                 ((User)obj).setUserRatings(urs.getUserRatingsByUserId(obj.getId(), 10, 0));
@@ -72,7 +73,8 @@ public class UserRest {
                 JsonArray ratingsArr = userRatingBuilder.build();
 
                 JsonArrayBuilder reservationBuilder = Json.createArrayBuilder();
-                ((User)obj).setReservations(rs.findReservationsByClientId(obj.getId(),10,0 ));
+                Collection<Reservation> res = rs.findReservationsByClientId(obj.getId(),10,0 );
+                ((User)obj).setReservations(res);
 
                 ((User)obj).getReservations().forEach(r -> {
                     JsonObject artistJsonObj = Json.createObjectBuilder()
@@ -84,18 +86,19 @@ public class UserRest {
                             .build();
 
                     JsonObject serviceProvidedJsonObj = Json.createObjectBuilder().
-                            add("name", ((ServiceProvided)obj).getName()).
-                            add("price", ((ServiceProvided)obj).getPrice()).
+//                            add("name", ((ServiceProvided)obj).getName()).
+//                            add("price", ((ServiceProvided)obj).getPrice()).
                             build();
 
                     JsonObject ratingObj = Json.createObjectBuilder()
-                            .add("id",r.getId())
                             .add("status",r.getStatus().toString())
-                            .add("startDateTime",r.getStartDateTimeStart().toString())
-                            .add("endDateTime",r.getEndDateTimeStart().toString())
+                            .add("startDateTime",r.getStartDateTime().toString())
+                            .add("endDateTime",r.getEndDateTime().toString())
                             .add("artist",artistJsonObj)
                             .add("servicesProvided",serviceProvidedJsonObj)
                             .build();
+
+//                    reservationBuilder.add()
                 });
                 JsonArray reservationArray = reservationBuilder.build();
 
@@ -142,7 +145,7 @@ public class UserRest {
             }
 
             @Override
-            public AbstractEntity adaptFromJson(JsonObject obj) throws Exception {
+            public User adaptFromJson(JsonObject obj) throws Exception {
                 return null;
             }
         });

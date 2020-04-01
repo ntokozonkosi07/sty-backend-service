@@ -65,7 +65,7 @@ public class RequirementRestTest {
                 .addPackage(UserRatingService.class.getPackage())
                 .addPackage(ReservationService.class.getPackage())
                 .addPackage(UserRoleService.class.getPackage())
-                .addClasses(Requirement.class,com.railroad.entity.adapters.EntityAdapter.class,EntityAdapter.class,config.class)
+                .addClasses(Requirement.class,EntityAdapter.class,config.class)
                 .addPackage(CustomExceptionMapperQualifier.class.getPackage())
                 .addAsResource("persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");

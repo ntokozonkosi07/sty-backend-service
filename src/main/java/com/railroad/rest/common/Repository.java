@@ -26,8 +26,8 @@ public abstract class Repository<T> {
     }
 
     public T update(T obj){
-        em.merge(obj);
-        return obj;
+        T _obj = em.merge(obj);
+        return _obj;
     }
 
     public void delete(Long id) {
@@ -35,7 +35,7 @@ public abstract class Repository<T> {
         if (em.contains(obj)) {
             em.remove(obj);
         } else {
-            em.merge(obj);
+            update(obj);
         }
     }
 

@@ -2,6 +2,7 @@ package com.railroad.entity.reservation;
 
 import com.railroad.entity.ServiceProvided;
 import com.railroad.entity.User;
+import lombok.Data;
 
 import javax.json.bind.annotation.JsonbDateFormat;
 import javax.validation.constraints.NotNull;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Size;
 import javax.ws.rs.DefaultValue;
 import java.time.LocalDateTime;
 
+@Data
 public class ReservationDto {
 
     @NotNull

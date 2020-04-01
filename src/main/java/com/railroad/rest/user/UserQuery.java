@@ -22,15 +22,11 @@ class UserQuery extends Repository<User> {
 
     @Override
     public User findById(Long id) {
-        return getSingleResults(new HashMap<String, Object>(){{ put("id", Long.valueOf(id)); }}, User.FIND_USER_BY_ID);
+        return this.getSingleResults(new HashMap<String, Object>(){{ put("id", Long.valueOf(id)); }}, User.FIND_USER_BY_ID);
     }
 
     public Collection<User> findUserRatingsById(Long id,Integer maxResults, Integer firstResults) {
         return getCollectionResults(new HashMap<String, Object>(){{ put("id", Long.valueOf(id)); }}, maxResults, firstResults, User.FIND_USER_RATING_BY_ID);
-    }
-
-    public Collection<User> findReservationsById(Long id, int maxResults, Integer firstResults) {
-        return getCollectionResults(new HashMap<String, Object>(){{ put("id", Long.valueOf(id)); }}, maxResults, firstResults, User.FIND_USER_RESERVATIONS_BY_ID);
     }
 
     public Collection<User> findArtistByServiceProvidedId(Long id, int maxResults, Integer firstResults){

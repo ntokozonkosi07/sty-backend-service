@@ -47,7 +47,7 @@ public class RoleTest {
                 .addPackage(LoggingFilter.class.getPackage())
                 .addPackage(Reservation.class.getPackage())
                 .addPackage(AbstractService.class.getPackage())
-                .addClasses(com.railroad.entity.adapters.EntityAdapter.class, EntityAdapter.class, config.class)
+                .addClasses(EntityAdapter.class, config.class)
                 .addPackage(CustomExceptionMapperQualifier.class.getPackage())
                 .addAsResource("persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
