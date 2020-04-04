@@ -52,6 +52,7 @@ public class RoleRest {
 
     @PUT @Path("/")
     public Response update(Role role){
-        return Response.ok(rs.update(role)).build();
+        String json = jsonb.toJson(rs.update(role));
+        return Response.ok(json).build();
     }
 }

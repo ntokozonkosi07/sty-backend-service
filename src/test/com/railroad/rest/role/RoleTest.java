@@ -119,7 +119,9 @@ public class RoleTest {
         @Cleanup() CloseableHttpResponse response = http.put(url,jsonb.toJson(roleIn));
         HttpEntity entity = response.getEntity();
 
-        Role roleOut = jsonb.fromJson(EntityUtils.toString(entity),Role.class);
+        String json = EntityUtils.toString(entity);
+
+        Role roleOut = jsonb.fromJson(json,Role.class);
 
         assertEquals(200, response.getStatusLine().getStatusCode());
         assertEquals(roleOut.getName(), roleOut.getName());

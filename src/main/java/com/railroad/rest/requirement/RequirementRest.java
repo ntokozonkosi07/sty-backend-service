@@ -99,6 +99,6 @@ public class RequirementRest {
     @Path("/") @PUT
     public Response updateRequirement(Requirement requirement) throws IllegalArgumentException{
         Requirement req = rs.updateRequirement(requirement);
-        return Response.ok(req).build();
+        return Response.ok(jsonb.toJson(req)).build();
     }
 }

@@ -2,6 +2,7 @@ package com.railroad.rest.role;
 
 import com.railroad.common.entityAdapters.EntityAdapter;
 import com.railroad.entity.Role;
+import com.railroad.entity.UserRole;
 
 import javax.json.*;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class RoleMashaler extends EntityAdapter<Role> {
         Role role = new Role();
         role.setId(((JsonNumber)obj.get("id")).longValue());
         role.setName(((JsonString)obj.get("name")).getString());
-        role.setUserRoles(new ArrayList<>());
+        role.setUserRoles(new ArrayList<UserRole>());
         return role;
     }
 }

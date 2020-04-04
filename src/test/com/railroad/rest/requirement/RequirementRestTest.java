@@ -102,9 +102,9 @@ public class RequirementRestTest {
             req.setDescription(((JsonString)obj.get("description")).getString());
             req.setPrice(((JsonNumber)obj.get("price")).doubleValue());
 
-            Collection services = new ArrayList();
+            Collection<ServiceProvided> services = new ArrayList<ServiceProvided>();
 
-            obj.get("servicesProvided").asJsonArray().forEach(x -> services.add(x));
+//            obj.get("servicesProvided").asJsonArray().forEach(x -> services.add(null));
 
             req.setServicesProvided(services);
             return req;
