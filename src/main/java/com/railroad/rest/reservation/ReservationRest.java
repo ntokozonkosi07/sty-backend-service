@@ -94,7 +94,7 @@ public class ReservationRest {
         return Response.ok(jsonb.toJson(res)).build();
     }
 
-    @Path("/{id}") @GET
+    @Path("/{id: \\d+}") @GET
     public Response findAppointment(@PathParam(value = "id") Long id){
         Reservation res = this.reservationService.findById(id);
         return Response.ok(jsonb.toJson(res)).build();
