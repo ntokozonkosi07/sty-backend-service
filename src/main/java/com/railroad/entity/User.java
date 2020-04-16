@@ -13,9 +13,10 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "S_USER")
-@Data
+@Data()
 @NamedQuery(name=User.FIND_ALL_USERS, query = "select u from User u")
 @NamedQuery(name=User.FIND_USER_BY_ID, query = "select u from User u where u.Id = :id")
+@NamedQuery(name=User.FIND_USER_BY_EMAIL, query = "SELECT u FROM User u WHERE u.email = :email")
 @NamedQuery(name=User.FIND_USER_RATING_BY_ID, query = "SELECT r from User u INNER JOIN u.userRatings r WHERE u.Id = :id")
 @NamedQuery(name=User.FIND_USER_SERVICES_PROVIDED_BY_ID, query = "SELECT s from User u INNER JOIN u.servicesProvided s WHERE u.Id = :id")
 @NamedQuery(name=User.FIND_ROLE_BY_USER_ID, query = "SELECT ur from UserRole ur INNER JOIN ur.role r WHERE ur.id.userId = :id")
@@ -25,6 +26,7 @@ public class User extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 	public static final String FIND_ALL_USERS = "FIND_ALL_USERS";
     public static final String FIND_USER_BY_ID = "FIND_USER_BY_ID";
+    public static final String FIND_USER_BY_EMAIL = "FIND_USER_BY_EMAIL";
     public static final String FIND_USER_RATING_BY_ID = "FIND_USER_RATING_BY_ID";
     public static final String FIND_USER_SERVICES_PROVIDED_BY_ID = "FIND_USER_SERVICES_PROVIDED_BY_ID";
     public static final String FIND_ROLE_BY_USER_ID = "FIND_ROLE_BY_USER_ID";

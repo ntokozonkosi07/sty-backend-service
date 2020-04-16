@@ -1,13 +1,8 @@
 package com.railroad.rest.serviceProvided;
 
-import com.railroad.entity.User;
-import com.railroad.entity.Requirement;
 import com.railroad.entity.ServiceProvided;
 import com.railroad.rest.common.Repository;
 
-import javax.inject.Inject;
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,7 +21,7 @@ class ServiceProvidedQuery extends Repository<ServiceProvided> {
 
     @Override
     public ServiceProvided findById(Long id) {
-        return this.getSingleResults(new HashMap<String, Long>(){{put("id", Long.valueOf(id)); }}, ServiceProvided.FIND_SERVICE_PROVIDED_BY_ID);
+        return this.getSingleResultByNamedQuery(new HashMap<String, Long>(){{put("id", Long.valueOf(id)); }}, ServiceProvided.FIND_SERVICE_PROVIDED_BY_ID);
     }
 
     public Collection<ServiceProvided> getServiceProvidedByArtistId(Long artistId, Integer maxResults, Integer firstResults) throws IllegalArgumentException{

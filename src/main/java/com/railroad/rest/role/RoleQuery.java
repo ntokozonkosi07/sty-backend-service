@@ -20,7 +20,7 @@ public class RoleQuery extends Repository<Role> {
 
     @Override
     public Role findById(Long id) throws IllegalArgumentException {
-        return this.getSingleResults(new HashMap<String, Long>(){{ put("id", Long.valueOf(id)); }}, Role.FIND_ROLE_BY_ID);
+        return this.getSingleResultByNamedQuery(new HashMap<String, Long>(){{ put("id", Long.valueOf(id)); }}, Role.FIND_ROLE_BY_ID);
     }
 
     public Collection<Role> findRolesByUserId(Long userId, int maxResults, int firstResults){

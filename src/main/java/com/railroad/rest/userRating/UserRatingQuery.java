@@ -21,7 +21,7 @@ public class UserRatingQuery extends Repository<UserRating> {
 
     @Override
     public UserRating findById(Long id) {
-        return this.getSingleResults(new HashMap<String, Long>(){{ put("id", id); }}, UserRating.FIND_USER_RATING_BY_ID);
+        return this.getSingleResultByNamedQuery(new HashMap<String, Long>(){{ put("id", id); }}, UserRating.FIND_USER_RATING_BY_ID);
     }
 
     public Collection<UserRating> getUserRatingsByUserId(Long id, int maxResults, int firstResults){

@@ -21,7 +21,7 @@ public class ReservationQuery extends Repository<Reservation> {
 
     @Override
     public Reservation findById(Long id) {
-        return this.getSingleResults(new HashMap<String, Object>() {{ put("id", Long.valueOf(id)); }},Reservation.FIND_RESERVATION_BY_ID);
+        return this.getSingleResultByNamedQuery(new HashMap<String, Object>() {{ put("id", Long.valueOf(id)); }},Reservation.FIND_RESERVATION_BY_ID);
     }
 
     public Collection<Reservation> findtReservationsByArtistId(Long id, int maxResults, int firstResults){

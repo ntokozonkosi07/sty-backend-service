@@ -1,12 +1,8 @@
 package com.railroad.rest.requirement;
 
 import com.railroad.entity.Requirement;
-import com.railroad.entity.ServiceProvided;
 import com.railroad.rest.common.Repository;
 
-import javax.inject.Inject;
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,7 +21,7 @@ class RequirementQuery extends Repository<Requirement> {
 
     @Override
     public Requirement findById(Long id) {
-        return this.getSingleResults(new HashMap<String, Long>(){{ put("id", Long.valueOf(id)); }}, Requirement.FIND_REQUIREMENT_BY_ID);
+        return this.getSingleResultByNamedQuery(new HashMap<String, Long>(){{ put("id", Long.valueOf(id)); }}, Requirement.FIND_REQUIREMENT_BY_ID);
     }
 
     public Collection<Requirement> findRequirementsByServiceProvidedId(Long id, int maxResults, int firstResults){

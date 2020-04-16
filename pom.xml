@@ -231,6 +231,14 @@
             <scope>provided</scope>
         </dependency>
         <!-- end of lombok -->
+
+        <!-- start of shiro config-->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+            <version>1.2.4</version>
+        </dependency>
+        <!-- start of shiro config-->
     </dependencies>
 
     <properties>

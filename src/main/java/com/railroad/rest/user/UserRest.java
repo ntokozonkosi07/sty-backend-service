@@ -1,8 +1,21 @@
 package com.railroad.rest.user;
 
+import com.railroad.common.annotation.Log;
+import com.railroad.common.entityAdapters.EntityAdapter;
+import com.railroad.entity.User;
+import com.railroad.entity.reservation.Reservation;
+import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
+import com.railroad.rest.reservation.ReservationService;
+import com.railroad.rest.serviceProvided.ServiceProvidedService;
+import com.railroad.rest.userRating.UserRatingService;
+import com.railroad.rest.userRoles.UserRoleService;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.json.*;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
@@ -11,19 +24,6 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import com.railroad.common.annotation.Log;
-import com.railroad.common.entityAdapters.EntityAdapter;
-import com.railroad.entity.AbstractEntity;
-import com.railroad.entity.User;
-import com.railroad.entity.ServiceProvided;
-import com.railroad.entity.reservation.Reservation;
-import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
-import com.railroad.rest.reservation.ReservationService;
-import com.railroad.rest.serviceProvided.ServiceProvidedService;
-import com.railroad.rest.userRating.UserRatingService;
-import com.railroad.rest.userRoles.UserRoleService;
-
 import java.util.Collection;
 
 @Log
@@ -179,6 +179,12 @@ public class UserRest {
     public Response findUserById(@NotNull @PathParam("id") Long id) {
     	User user = userService.findUserById(id);
     	return Response.ok(jsonb.toJson(user)).build();
+    }
+
+    @Path("/findEntityByAttribute") @GET
+    public Response findUserByEmail(@NotNull @QueryParam("email") String email) throws NoSuchFieldException {
+        User user = userService.findUserByEmail(email);
+        return Response.ok(jsonb.toJson(user)).build();
     }
 
     @Path("/") @PUT

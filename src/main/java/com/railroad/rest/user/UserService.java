@@ -1,21 +1,20 @@
 package com.railroad.rest.user;
 
-import com.railroad.entity.*;
-import com.railroad.entity.reservation.Reservation;
+import com.railroad.entity.User;
 import com.railroad.rest.common.AbstractService;
+import com.railroad.rest.common.Repository;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
-
 import java.util.Collection;
 import java.util.Optional;
 
 @Stateless
 public class UserService extends AbstractService  {
     @Inject
-    UserQuery query;
+    Repository<User> query;
 
     public Collection<User> getUsers(Integer maxResults, Optional<Integer> firstResults){
         Integer firstRes = this.parameterValidation(maxResults, firstResults);
@@ -38,7 +37,6 @@ public class UserService extends AbstractService  {
     }
 
 	public User findUserById(@NotNull Long id) {
-		
 		return query.findById(id);
 	}
 
@@ -46,24 +44,11 @@ public class UserService extends AbstractService  {
         return query.update(user);
     }
 
-//    public Collection<UserRating> findUserRatingsById(@NotNull Long id, Integer maxResults, Optional<Integer> firstResults){
-//        Integer firstRes = this.parameterValidation(maxResults, firstResults);
-//
-//        return query.findUserRatingsById(id,maxResults, firstRes);
-//    }
-//
-//    public Collection<Reservation> findReservationsById(Long id, Integer maxResults, Optional<Integer> firstResults) {
-//        Integer firstRes = this.parameterValidation(maxResults, firstResults);
-//        return query.findReservationsById(id,maxResults, firstRes);
-//    }
-//
-//    public Collection<ServiceProvided> findServicesProvidedById(Long id, Integer maxResults, Optional<Integer> firstResults) {
-//        Integer firstRes = this.parameterValidation(maxResults, firstResults);
-//        return query.findServicesProvidedById(id,maxResults, firstRes);
-//    }
-//
-
     public Collection<User> findArtistByServiceProvidedId(Long id, int maxResults, int firstResults){
-        return query.findArtistByServiceProvidedId(id,maxResults,firstResults);
+        return ((UserQuery)query).findArtistByServiceProvidedId(id,maxResults,firstResults);
+    }
+
+    public User findUserByEmail(String email) throws NoSuchFieldException {
+        return ((UserQuery)query).findUserByEmail(email);
     }
 }

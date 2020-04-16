@@ -1,7 +1,6 @@
 package com.railroad.rest.user;
 
-import com.railroad.entity.*;
-import com.railroad.entity.ServiceProvided;
+import com.railroad.entity.User;
 import com.railroad.rest.common.Repository;
 
 import javax.transaction.Transactional;
@@ -22,7 +21,11 @@ class UserQuery extends Repository<User> {
 
     @Override
     public User findById(Long id) {
-        return this.getSingleResults(new HashMap<String, Object>(){{ put("id", Long.valueOf(id)); }}, User.FIND_USER_BY_ID);
+        return this.getSingleResultByNamedQuery(new HashMap<String, Object>(){{ put("id", Long.valueOf(id)); }}, User.FIND_USER_BY_ID);
+    }
+
+    public User findUserByEmail(String email){
+        return this.getSingleResultByNamedQuery(new HashMap<String, String>(){{ put("email", email); }}, User.FIND_USER_BY_EMAIL);
     }
 
     public Collection<User> findUserRatingsById(Long id,Integer maxResults, Integer firstResults) {
