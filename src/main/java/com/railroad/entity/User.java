@@ -1,76 +1,72 @@
 package com.railroad.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.railroad.entity.reservation.Reservation;
+import lombok.Data;
 
 import javax.json.bind.annotation.JsonbProperty;
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.util.Collection;
 
 @Entity
 @Table(name = "S_USER")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "USER_TYPE")
+@Data()
 @NamedQuery(name=User.FIND_ALL_USERS, query = "select u from User u")
 @NamedQuery(name=User.FIND_USER_BY_ID, query = "select u from User u where u.Id = :id")
+@NamedQuery(name=User.FIND_USER_BY_EMAIL, query = "SELECT u FROM User u WHERE u.email = :email")
 @NamedQuery(name=User.FIND_USER_RATING_BY_ID, query = "SELECT r from User u INNER JOIN u.userRatings r WHERE u.Id = :id")
-@NamedQuery(name=User.FIND_USER_RESERVATIONS_BY_ID, query = "SELECT r from Reservation r WHERE r.id.clientId = :id")
-@NamedQuery(name=User.FIND_USER_SERVICES_PROVIDED_BY_ID, query = "SELECT s from User u INNER JOIN u.serviceProvided s WHERE u.Id = :id")
+@NamedQuery(name=User.FIND_USER_SERVICES_PROVIDED_BY_ID, query = "SELECT s from User u INNER JOIN u.servicesProvided s WHERE u.Id = :id")
+@NamedQuery(name=User.FIND_ROLE_BY_USER_ID, query = "SELECT ur from UserRole ur INNER JOIN ur.role r WHERE ur.id.userId = :id")
+@NamedQuery(name=User.FIND_ARTIST_BY_SERVICE_PROVIDED_ID, query = "SELECT u from User u INNER JOIN u.servicesProvided s WHERE s.Id = :id")
 public class User extends AbstractEntity {
 
-	private static final long serialVersionUID = 1L;
-	public static final String FIND_ALL_USERS = "user.findAllUsers";
-    public static final String FIND_USER_BY_ID = "user.findUserById";
-    public static final String FIND_USER_RATING_BY_ID = "user.findUserRatingByUserId";
-    public static final String FIND_USER_RESERVATIONS_BY_ID = "user.findUserReservationsByUserId";
-    public static final String FIND_USER_SERVICES_PROVIDED_BY_ID = "user.findUserServicesProvidedByUserId";
+    private static final long serialVersionUID = 1L;
+	public static final String FIND_ALL_USERS = "FIND_ALL_USERS";
+    public static final String FIND_USER_BY_ID = "FIND_USER_BY_ID";
+    public static final String FIND_USER_BY_EMAIL = "FIND_USER_BY_EMAIL";
+    public static final String FIND_USER_RATING_BY_ID = "FIND_USER_RATING_BY_ID";
+    public static final String FIND_USER_SERVICES_PROVIDED_BY_ID = "FIND_USER_SERVICES_PROVIDED_BY_ID";
+    public static final String FIND_ROLE_BY_USER_ID = "FIND_ROLE_BY_USER_ID";
+    public static final String FIND_ARTIST_BY_SERVICE_PROVIDED_ID = "FIND_ARTIST_BY_SERVICE_PROVIDED_ID";
 
-    @Getter @Setter
     @NotEmpty(message = "cannot leave name empty")
     private String name;
 
-    @Getter @Setter
     @NotEmpty(message = "lastName cannot be empty")
     private String lastName;
 
-    @Getter @Setter
     @Email
     @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "malformed email address")
     @NotNull(message = "email cannot be null")
     @Column(unique = true)
     private String email;
 
-    @Getter @Setter
+    @NotNull(message = "password cannot be null")
+    @Size(min = 6)
+    private String password;
+
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @JsonbProperty(nillable=true)
     private byte[] picture;
 
-    @Getter @Setter
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "rater")
     @JsonbProperty(nillable=true)
     private Collection<UserRating> userRatings;
 
-    @Getter @Setter
     @OneToMany(mappedBy = "artist")
     @JsonbProperty(nillable=true)
-    private Collection<Reservation> reservation;
+    private Collection<Reservation> reservations;
 
-    @Getter @Setter
     @ManyToMany
     @JoinTable(
             joinColumns = @JoinColumn(name = "USER_ID"),
             inverseJoinColumns = @JoinColumn(name = "SERVICE_ID")
     )
     @JsonbProperty(nillable=true)
-    private Collection<ServiceProvided> serviceProvided;
+    private Collection<ServiceProvided> servicesProvided;
 
-    @Getter @Setter
-    @OneToMany(mappedBy = "user")
+    @OneToMany
     @JsonbProperty(nillable=true)
-    private Collection<UserRole> roles;
+    private Collection<UserRole> userRoles;
 }

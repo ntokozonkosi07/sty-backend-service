@@ -1,78 +1,38 @@
 package com.railroad.rest.user;
 
-import com.railroad.entity.Reservation;
 import com.railroad.entity.User;
-import com.railroad.entity.UserRating;
-import com.railroad.entity.ServiceProvided;
+import com.railroad.rest.common.Repository;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolationException;
 import java.util.Collection;
+import java.util.HashMap;
 
 @Transactional
-class UserQuery {
-    @Inject
-    EntityManager entityManager;
+class UserQuery extends Repository<User> {
 
-    Collection<User> getUsers(Integer maxResults, Integer firstResults){
-         return entityManager.createNamedQuery(User.FIND_ALL_USERS, User.class)
-                 .setMaxResults(maxResults)
-                 .setFirstResult(firstResults)
-                 .getResultList();
+    public UserQuery(){
+        super(User.class);
     }
 
-    User createUser(User user) throws ConstraintViolationException {
-        if(user.getId() == null){
-            entityManager.persist(user);
-            return user;
-        }
-        
-        return user;
-    }
-    
-    User updateUser(User user) throws NoResultException {
-        try {
-            // if finduserById throws a NoResultException means the user is not found
-//            User user = this.findUserById(user.getId());
-
-            User _user = entityManager.merge(user);
-            return _user;
-        } catch(NoResultException e){
-            throw new NoResultException();
-        }
-    }
-    
-    User findUserById(Long id){
-        return entityManager.createNamedQuery(User.FIND_USER_BY_ID, User.class)
-                .setParameter("id", id)
-                .getSingleResult();
+    @Override
+    public Collection<User> findAll(int maxResults, int firstResults) {
+        return this.getCollectionResults(maxResults,firstResults,User.FIND_ALL_USERS);
     }
 
-    public Collection<UserRating> findUserRatingsById(Long id,Integer maxResults, Integer firstResults) {
-        return entityManager.createNamedQuery(User.FIND_USER_RATING_BY_ID, UserRating.class)
-                .setParameter("id", id)
-                .setMaxResults(maxResults)
-                .setFirstResult(firstResults)
-                .getResultList();
+    @Override
+    public User findById(Long id) {
+        return this.getSingleResultByNamedQuery(new HashMap<String, Object>(){{ put("id", Long.valueOf(id)); }}, User.FIND_USER_BY_ID);
     }
 
-    public Collection<Reservation> findReservationsById(Long id, int maxResults, Integer firstResults) {
-        return entityManager.createNamedQuery(User.FIND_USER_RESERVATIONS_BY_ID, Reservation.class)
-                .setParameter("id", id)
-                .setMaxResults(maxResults)
-                .setFirstResult(firstResults)
-                .getResultList();
+    public User findUserByEmail(String email){
+        return this.getSingleResultByNamedQuery(new HashMap<String, String>(){{ put("email", email); }}, User.FIND_USER_BY_EMAIL);
     }
 
-    public Collection<ServiceProvided> findServicesProvidedById(Long id, Integer maxResults, Integer firstResults) {
-        return entityManager.createNamedQuery(User.FIND_USER_SERVICES_PROVIDED_BY_ID, ServiceProvided.class)
-                .setParameter("id", id)
-                .setMaxResults(maxResults)
-                .setFirstResult(firstResults)
-                .getResultList();
+    public Collection<User> findUserRatingsById(Long id,Integer maxResults, Integer firstResults) {
+        return getCollectionResults(new HashMap<String, Object>(){{ put("id", Long.valueOf(id)); }}, maxResults, firstResults, User.FIND_USER_RATING_BY_ID);
     }
 
+    public Collection<User> findArtistByServiceProvidedId(Long id, int maxResults, Integer firstResults){
+        return getCollectionResults(new HashMap<String, Object>(){{ put("id", Long.valueOf(id)); }}, maxResults, firstResults, User.FIND_ARTIST_BY_SERVICE_PROVIDED_ID);
+    }
 }

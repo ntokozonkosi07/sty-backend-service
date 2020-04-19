@@ -5,14 +5,11 @@ import com.railroad.common.entityAdapters.EntityAdapter;
 import com.railroad.common.filters.LoggingFilter;
 import com.railroad.common.producers.EntityManagerProducer;
 import com.railroad.configuration.config;
-import com.railroad.entity.Requirement;
 import com.railroad.entity.Role;
-import com.railroad.entity.ServiceProvided;
-import com.railroad.entity.User;
+import com.railroad.entity.reservation.Reservation;
 import com.railroad.rest.common.AbstractService;
 import com.railroad.rest.common.HttpUtils;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
-import com.railroad.rest.serviceProvided.ServicesProvidedRest;
 import lombok.Cleanup;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -28,12 +25,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.json.*;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -50,8 +45,9 @@ public class RoleTest {
                 .addPackage(Role.class.getPackage())
                 .addPackage(EntityManagerProducer.class.getPackage())
                 .addPackage(LoggingFilter.class.getPackage())
+                .addPackage(Reservation.class.getPackage())
                 .addPackage(AbstractService.class.getPackage())
-                .addClasses(com.railroad.entity.adapters.EntityAdapter.class, EntityAdapter.class, config.class)
+                .addClasses(EntityAdapter.class, config.class)
                 .addPackage(CustomExceptionMapperQualifier.class.getPackage())
                 .addAsResource("persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
@@ -66,7 +62,9 @@ public class RoleTest {
         this.http = new HttpUtils();
         this.url = "http://localhost:8080/style-beat/api/v1/role";
 
-        this.jsonb = JsonbBuilder.create();
+        JsonbConfig config = new JsonbConfig().withAdapters(new RoleMashaler());
+
+        this.jsonb = JsonbBuilder.create(config);
     }
 
     @Test @InSequence(1) @RunAsClient
@@ -105,7 +103,9 @@ public class RoleTest {
     public void should_find_list_of_roles() throws IOException {
         @Cleanup() CloseableHttpResponse response = http.get(url);
         HttpEntity entity = response.getEntity();
-        Collection<Role> roles = jsonb.fromJson(EntityUtils.toString(entity), new ArrayList<Role>(){}.getClass().getGenericSuperclass());
+//        Collection<Role> roles = jsonb.fromJson(EntityUtils.toString(entity), new ArrayList<Role>(){}.getClass().getGenericSuperclass());
+        String json = EntityUtils.toString(entity);
+        Collection<Role> roles = jsonb.fromJson(json, ArrayList.class);
 
         assertEquals(200, response.getStatusLine().getStatusCode());
         assertEquals(1, roles.size());
@@ -119,7 +119,9 @@ public class RoleTest {
         @Cleanup() CloseableHttpResponse response = http.put(url,jsonb.toJson(roleIn));
         HttpEntity entity = response.getEntity();
 
-        Role roleOut = jsonb.fromJson(EntityUtils.toString(entity),Role.class);
+        String json = EntityUtils.toString(entity);
+
+        Role roleOut = jsonb.fromJson(json,Role.class);
 
         assertEquals(200, response.getStatusLine().getStatusCode());
         assertEquals(roleOut.getName(), roleOut.getName());
@@ -130,7 +132,9 @@ public class RoleTest {
         @Cleanup() CloseableHttpResponse response = http.get(url+"/1");
         HttpEntity entity = response.getEntity();
 
-        Role roleOut = jsonb.fromJson(EntityUtils.toString(entity),Role.class);
+        String json = EntityUtils.toString(entity);
+
+        Role roleOut = this.jsonb.fromJson(json,Role.class);
 
         assertNotNull(roleOut);
     }

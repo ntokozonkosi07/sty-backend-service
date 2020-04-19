@@ -1,55 +1,31 @@
 package com.railroad.rest.requirement;
 
 import com.railroad.entity.Requirement;
-import com.railroad.entity.ServiceProvided;
+import com.railroad.rest.common.Repository;
 
-import javax.inject.Inject;
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.HashMap;
 
 @Transactional
-class RequirementQuery {
+class RequirementQuery extends Repository<Requirement> {
 
-    @Inject
-    EntityManager em;
-
-    Requirement createRequirement(Requirement requirement) throws EntityExistsException{
-        if(requirement.getId() != null)
-            throw new EntityExistsException();
-
-        em.persist(requirement);
-        return requirement;
+    public RequirementQuery() {
+        super(Requirement.class);
     }
 
-    Requirement getRequirementById(Long id) throws IllegalArgumentException{
-        return em.createNamedQuery(Requirement.FIND_REQUIREMENT_BY_ID, Requirement.class)
-                .setParameter("id", id)
-                .getSingleResult();
+    @Override
+    public Collection<Requirement> findAll(int maxResults, int firstResults) {
+        return this.getCollectionResults(maxResults, firstResults, Requirement.FIND_ALL_REQUIREMENTS);
     }
 
-    Collection<Requirement> getRequirements(Integer maxResults, Integer firstResults) throws IllegalArgumentException{
-        return em.createNamedQuery(Requirement.FIND_ALL_REQUIREMENTS, Requirement.class)
-                .setMaxResults(maxResults)
-                .setFirstResult(firstResults)
-                .getResultList();
+    @Override
+    public Requirement findById(Long id) {
+        return this.getSingleResultByNamedQuery(new HashMap<String, Long>(){{ put("id", Long.valueOf(id)); }}, Requirement.FIND_REQUIREMENT_BY_ID);
     }
 
-    Requirement updateRequirement(Requirement requirement) throws IllegalArgumentException{
-        if(requirement.getId() == null)
-            throw new IllegalArgumentException("Requirement does not have an id");
-
-        em.merge(requirement);
-        return requirement;
+    public Collection<Requirement> findRequirementsByServiceProvidedId(Long id, int maxResults, int firstResults){
+        return this.getCollectionResults(new HashMap<String, Long>(){{ put("id", Long.valueOf(id)); }}, maxResults, firstResults, Requirement.FIND_REQUIREMENTS_BY_SERVICE_PROVIDED);
     }
 
-    Collection<ServiceProvided> getRequirementAssociatedServicesProvided(Long requirementId, Integer maxResults, Integer firstResults)
-            throws IllegalArgumentException {
-        return em.createNamedQuery(Requirement.FIND_SERVICES_PROVIDED_BY_REQUIREMENT_ID, ServiceProvided.class)
-                .setParameter("id", requirementId)
-                .setMaxResults(maxResults)
-                .setFirstResult(firstResults)
-                .getResultList();
-    }
 }

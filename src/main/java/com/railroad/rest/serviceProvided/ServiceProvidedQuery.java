@@ -1,56 +1,33 @@
 package com.railroad.rest.serviceProvided;
 
-import com.railroad.entity.User;
-import com.railroad.entity.Requirement;
 import com.railroad.entity.ServiceProvided;
+import com.railroad.rest.common.Repository;
 
-import javax.inject.Inject;
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.HashMap;
 
 @Transactional
-class ServiceProvidedQuery {
+class ServiceProvidedQuery extends Repository<ServiceProvided> {
 
-    @Inject
-    EntityManager entityManager;
-
-    Collection<ServiceProvided> getSerivcesProvided(Integer maxResults, Integer firstResults) throws IllegalArgumentException{
-        return entityManager.createNamedQuery(ServiceProvided.FIND_ALL_SERVICE_PROVIDED, ServiceProvided.class)
-                .setMaxResults(maxResults)
-                .setFirstResult(firstResults)
-                .getResultList();
+    protected ServiceProvidedQuery() {
+        super(ServiceProvided.class);
     }
 
-    ServiceProvided saveServiceProvided(ServiceProvided serviceProvided) throws EntityExistsException{
-        entityManager.persist(serviceProvided);
-        return serviceProvided;
+    @Override
+    public Collection<ServiceProvided> findAll(int maxResults, int firstResults) {
+        return this.getCollectionResults(maxResults, firstResults, ServiceProvided.FIND_ALL_SERVICE_PROVIDED);
     }
 
-    Collection<Requirement> getServiceProvidedRequirements(Long id, Integer maxResults, Integer firstResults) throws IllegalArgumentException{
-        return entityManager.createNamedQuery(ServiceProvided.FIND_ALL_SERVICE_PROVIDED_REQUIREMENTS, Requirement.class)
-                .setParameter("id", id)
-                .setMaxResults(maxResults)
-                .setFirstResult(firstResults)
-                .getResultList();
+    @Override
+    public ServiceProvided findById(Long id) {
+        return this.getSingleResultByNamedQuery(new HashMap<String, Long>(){{put("id", Long.valueOf(id)); }}, ServiceProvided.FIND_SERVICE_PROVIDED_BY_ID);
     }
 
-    Collection<User> getServiceProvidedArtists(Long id, Integer maxResults, Integer firstResults) throws IllegalArgumentException{
-        return entityManager.createNamedQuery(ServiceProvided.FIND_ALL_SERVICE_PROVIDED_ARTISTS, User.class)
-                .setParameter("id", id)
-                .setMaxResults(maxResults)
-                .setFirstResult(firstResults)
-                .getResultList();
+    public Collection<ServiceProvided> getServiceProvidedByArtistId(Long artistId, Integer maxResults, Integer firstResults) throws IllegalArgumentException{
+        return this.getCollectionResults(new HashMap<String, Long>(){{put("id", Long.valueOf(artistId)); }},maxResults, firstResults, ServiceProvided.FIND_ALL_SERVICE_PROVIDED_BY_ARTIST_ID);
     }
-
-    public ServiceProvided getServicesProvided(Long id) {
-        return entityManager.createNamedQuery(ServiceProvided.FIND_SERVICE_PROVIDED_BY_ID, ServiceProvided.class)
-                .setParameter("id", id)
-                .getSingleResult();
-    }
-
-    public ServiceProvided updateServiceProvided(ServiceProvided service) throws IllegalArgumentException{
-        return entityManager.merge(service);
+    public Collection<ServiceProvided> findServicesProvidedByRequirementId(Long requirementId, Integer maxResults, Integer firstResults) throws IllegalArgumentException{
+        return this.getCollectionResults(new HashMap<String, Long>(){{put("id", Long.valueOf(requirementId)); }},maxResults, firstResults, ServiceProvided.FIND_SERVICES_PROVIDED_BY_REQUIREMENT_ID);
     }
 }

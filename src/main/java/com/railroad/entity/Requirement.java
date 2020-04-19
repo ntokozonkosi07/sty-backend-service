@@ -16,11 +16,11 @@ import java.util.Collection;
 @Table(name = "S_REQUIREMENT")
 @NamedQuery(name= Requirement.FIND_ALL_REQUIREMENTS, query = "select r from Requirement r")
 @NamedQuery(name= Requirement.FIND_REQUIREMENT_BY_ID, query = "select r from Requirement r where r.Id = :id")
-@NamedQuery(name= Requirement.FIND_SERVICES_PROVIDED_BY_REQUIREMENT_ID, query = "SELECT s FROM Requirement r INNER JOIN r.servicesProvided s WHERE r.Id = :id")
+@NamedQuery(name= Requirement.FIND_REQUIREMENTS_BY_SERVICE_PROVIDED, query = "SELECT r FROM Requirement r INNER JOIN r.servicesProvided s WHERE s.Id = :id")
 public class Requirement extends AbstractEntity {
-    public static final String FIND_ALL_REQUIREMENTS = "requirement.findAllRequirements";
-    public static final String FIND_REQUIREMENT_BY_ID = "requirement.findRequirementById";
-    public static final String FIND_SERVICES_PROVIDED_BY_REQUIREMENT_ID = "requirement.findServicesProvidedByRequirementId";
+    public static final String FIND_ALL_REQUIREMENTS = " FIND_ALL_REQUIREMENTS";
+    public static final String FIND_REQUIREMENT_BY_ID = "FIND_REQUIREMENT_BY_ID";
+    public static final String FIND_REQUIREMENTS_BY_SERVICE_PROVIDED = "FIND_REQUIREMENTS_BY_SERVICE_PROVIDED";
 
     @Getter @Setter
     @NotEmpty(message = "name cannot be empty")

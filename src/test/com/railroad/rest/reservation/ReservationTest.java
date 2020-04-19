@@ -32,7 +32,7 @@ public class ReservationTest {
                 .addPackage(User.class.getPackage())
                 .addPackage(EntityManagerProducer.class.getPackage())
                 .addPackage(LoggingFilter.class.getPackage())
-                .addClasses(ServiceProvided.class, Requirement.class,com.railroad.entity.adapters.EntityAdapter.class, EntityAdapter.class, config.class)
+                .addClasses(ServiceProvided.class, Requirement.class, EntityAdapter.class, config.class)
                 .addPackage(CustomExceptionMapperQualifier.class.getPackage())
                 .addAsResource("persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
