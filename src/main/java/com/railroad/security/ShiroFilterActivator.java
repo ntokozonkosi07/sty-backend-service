@@ -2,6 +2,8 @@ package com.railroad.security;
 
 import org.apache.shiro.web.servlet.ShiroFilter;
 
-//@WebFilter("/*")
+import javax.servlet.annotation.WebFilter;
+
+@WebFilter("/*")
 public class ShiroFilterActivator extends ShiroFilter {
 }

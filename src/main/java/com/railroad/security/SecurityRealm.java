@@ -1,16 +1,18 @@
 package com.railroad.security;
 
+import com.railroad.entity.User;
 import com.railroad.rest.user.UserService;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.*;
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Logger;
 
 public class SecurityRealm extends AuthorizingRealm {
@@ -34,13 +36,6 @@ public class SecurityRealm extends AuthorizingRealm {
     }
 
     @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-
-
-        return null;
-    }
-
-    @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         // Identify account to log to
         UsernamePasswordToken userPassToken = (UsernamePasswordToken) token;
@@ -49,9 +44,41 @@ public class SecurityRealm extends AuthorizingRealm {
             logger.warning("Username is null");
         }
 
-        // Read the user from DB
-//        User user = this.userService.findUserByEmail(email);
+        User user = null;
+        try{
+            user = this.userService.findUserByEmail(email);
+            if(user == null){
+                logger.warning(String.format("No account for for user [%s]", email));
+            }
+        } catch (NoSuchFieldException ex){
+            logger.warning(ex.getMessage());
+            throw new AuthenticationException();
+        }
 
-        return null;
+
+        return new SimpleAuthenticationInfo(email, user.getPassword(), getName());
+    }
+
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        if(principals == null)
+            throw new AuthorizationException("PrincipalCollection method argument cannot be null");
+
+        String username = (String) getAvailablePrincipal(principals);
+        Set<String> roleNames = new HashSet<>();
+
+
+        try{
+            this.userService.findUserByEmail(username)
+                    .getUserRoles()
+                    .stream()
+                    .forEach(x -> roleNames.add(x.getRole().getName()));
+        } catch (NoSuchFieldException ex){
+            throw new AuthorizationException("Cannot find user roles");
+        }
+
+        AuthorizationInfo info = new SimpleAuthorizationInfo(roleNames);
+
+        return info;
     }
 }

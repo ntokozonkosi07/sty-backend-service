@@ -29,7 +29,8 @@ public class RoleRest {
         this.jsonb = JsonbBuilder.create(config);
     }
 
-    @GET @Path("/")
+    @GET
+    @Path("/")
     public Response findAll(
             @QueryParam("maxResults") @DefaultValue(value = "10") int maxResults,
             @QueryParam("firstResults") @DefaultValue(value = "0") int firstResults

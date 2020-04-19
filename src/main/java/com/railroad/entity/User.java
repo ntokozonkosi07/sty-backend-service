@@ -5,10 +5,7 @@ import lombok.Data;
 
 import javax.json.bind.annotation.JsonbProperty;
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.util.Collection;
 
 @Entity
@@ -43,6 +40,10 @@ public class User extends AbstractEntity {
     @NotNull(message = "email cannot be null")
     @Column(unique = true)
     private String email;
+
+    @NotNull(message = "password cannot be null")
+    @Size(min = 6)
+    private String password;
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
