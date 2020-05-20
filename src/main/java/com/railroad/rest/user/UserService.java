@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -22,10 +23,13 @@ public class UserService extends AbstractService  {
         return query.findAll(maxResults,firstRes);
     }
     
-    public User createUser(User user) throws ConstraintViolationException {
+    public User createUser(User user) throws ConstraintViolationException, IOException {
         try {
             if (user.getId() == null) {
-                return query.save(user);
+                User _user = query.save(user);
+                _user.setPassword("[Password placeholder!]");
+                this.indexDocument(_user);
+                return _user;
             }
 
             return user;
@@ -40,8 +44,11 @@ public class UserService extends AbstractService  {
 		return query.findById(id);
 	}
 
-	public User updateUser(@NotNull User user) {
-        return query.update(user);
+	public User updateUser(@NotNull User user) throws IOException {
+        User _user = query.update(user);
+        _user.setPassword("[Password placeholder!]");
+        this.indexDocument(_user);
+        return _user;
     }
 
     public Collection<User> findArtistByServiceProvidedId(Long id, int maxResults, int firstResults){

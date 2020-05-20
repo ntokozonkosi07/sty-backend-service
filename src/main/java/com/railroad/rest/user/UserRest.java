@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.util.Collection;
 
 @Log
@@ -50,10 +51,11 @@ public class UserRest {
     }
 
     @Path("/") @POST
-    public Response saveUser(@NotNull @Valid User user) {
+    public Response saveUser(@NotNull @Valid User user) throws IOException {
         user.setPassword(passwordService.encryptPassword(user.getPassword()));
         User newUser = userService.createUser(user);
-        return Response.ok(newUser).build();
+        String payload = jsonb.toJson(newUser);
+        return Response.ok(payload).build();
     }
 
     @Auth
@@ -80,6 +82,7 @@ public class UserRest {
     @Path("/") @PUT
     public Response updateUser(@NotNull @Valid User user) throws NoResultExceptionMapper {
         User _user = userService.updateUser(user);
-        return Response.ok(_user).build();
+        String payload = jsonb.toJson(_user);
+        return Response.ok(payload).build();
     }
 }

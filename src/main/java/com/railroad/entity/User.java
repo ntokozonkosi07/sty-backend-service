@@ -43,6 +43,7 @@ public class User extends AbstractEntity {
 
     @NotNull(message = "password cannot be null")
     @Size(min = 6)
+    @JsonbProperty(nillable = true)
     private String password;
 
     @Lob
