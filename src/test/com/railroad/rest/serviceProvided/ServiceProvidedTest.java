@@ -5,12 +5,10 @@ import com.railroad.common.entityAdapters.EntityAdapter;
 import com.railroad.common.filters.LoggingFilter;
 import com.railroad.common.producers.EntityManagerProducer;
 import com.railroad.configuration.config;
-import com.railroad.entity.User;
 import com.railroad.entity.Requirement;
 import com.railroad.entity.ServiceProvided;
-import com.railroad.entity.UserRating;
+import com.railroad.entity.User;
 import com.railroad.entity.reservation.Reservation;
-import com.railroad.rest.common.AbstractService;
 import com.railroad.rest.common.HttpUtils;
 import com.railroad.rest.common.Repository;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
@@ -39,6 +37,7 @@ import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -264,7 +263,7 @@ public class ServiceProvidedTest {
     @Test
     @RunAsClient
     @InSequence(6)
-    public void should_update_saved_service_provided() throws IOException {
+    public void should_update_saved_service_provided() throws IOException, URISyntaxException {
         ServiceProvided serv = new ServiceProvided(1L,"Hair Weave Bomb",new ArrayList<>(),new ArrayList<>(),5.21);
 
         Jsonb jsonb = JsonbBuilder.create(config);

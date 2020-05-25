@@ -41,7 +41,7 @@ public class User extends AbstractEntity {
     @Column(unique = true)
     private String email;
 
-    @NotNull(message = "password cannot be null")
+//    @NotNull(message = "password cannot be null")
     @Size(min = 6)
     @JsonbProperty(nillable = true)
     private String password;

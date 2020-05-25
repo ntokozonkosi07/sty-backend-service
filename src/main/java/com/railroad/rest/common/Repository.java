@@ -51,7 +51,7 @@ public abstract class Repository<T> {
 
     /**
      * Gets single result of an type
-     * @param params sql parameters key value pair of type Map<key<String>, Value<T>>
+     * @param params sql parameters key value pair of type Mpassword cannot be nullap<key<String>, Value<T>>
      * @Param query NamedQuery to exceute, this has to be configured in teh @NamedQuery annotation on an Entity Type T
      * @return single instance type of T
      * */

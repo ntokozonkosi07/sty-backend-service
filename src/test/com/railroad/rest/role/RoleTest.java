@@ -29,6 +29,7 @@ import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -112,7 +113,7 @@ public class RoleTest {
     }
 
     @Test @InSequence(5) @RunAsClient
-    public void should_update_the_saved_role() throws IOException {
+    public void should_update_the_saved_role() throws IOException, URISyntaxException {
         Role roleIn = new Role("Bravo Hair Stylist");
         roleIn.setId(1L);
 
