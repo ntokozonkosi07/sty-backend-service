@@ -11,8 +11,8 @@ import java.io.Serializable;
 @MappedSuperclass
 @Data()
 public class AbstractEntity implements Serializable {
-	
-	@Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    protected Long Id;
 }
