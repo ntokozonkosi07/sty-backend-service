@@ -6,9 +6,12 @@ import com.railroad.rest.common.HttpUtils;
 import com.railroad.rest.user.UserAdapter;
 import lombok.Cleanup;
 import lombok.var;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.util.EntityUtils;
 
 import javax.annotation.PostConstruct;
 import javax.json.bind.Jsonb;
@@ -17,6 +20,10 @@ import javax.json.bind.JsonbConfig;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.net.URISyntaxException;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.Optional;
 
 public abstract class ElasticsearchRepository<T extends AbstractEntity> {
@@ -86,7 +93,7 @@ public abstract class ElasticsearchRepository<T extends AbstractEntity> {
         }
     }
 
-    private boolean indexExist(String name) throws IOException {
+    private boolean indexExist(String name) throws IOException, NoSuchAlgorithmException {
         builder.setPath(name.toLowerCase());
         @Cleanup CloseableHttpResponse response = http.get(builder.toString());
         return response.getStatusLine().getStatusCode() == 200;
@@ -101,7 +108,9 @@ public abstract class ElasticsearchRepository<T extends AbstractEntity> {
 
         var type = entity.getClass().getSimpleName().toLowerCase();
         String payload = jsonb.toJson(entity);
-        @Cleanup CloseableHttpResponse response = http.post(String.format("%s/%s_type/%s",builder.toString(), type, entity.getId()), payload);
+        String path = String.format("%s/%s_type/%s", type, type, entity.getId());
+        builder.setPath(path);
+        @Cleanup CloseableHttpResponse response = http.post(builder.toString(), payload);
 
          int httpStateCode = response.getStatusLine().getStatusCode();
         if(httpStateCode != 201){
@@ -121,5 +130,25 @@ public abstract class ElasticsearchRepository<T extends AbstractEntity> {
         if(httpStateCode != 200){
             throw new Exception(response.toString());
         }
+    }
+
+    public String searchDocs(String query) throws IOException, NoSuchAlgorithmException, URISyntaxException {
+        Class<T> type = (Class<T>) ((ParameterizedType) getClass()
+                .getGenericSuperclass()).getActualTypeArguments()[0];
+        var typeName = type.getSimpleName().toLowerCase();
+
+        builder.setPath(String.format("%s/%s_type/_search", typeName, typeName));
+
+        @Cleanup CloseableHttpResponse response = http.post(builder, "",Optional.of(new HashMap<String,String>(){{
+            put("q",query);
+        }}));
+        int httpStateCode = response.getStatusLine().getStatusCode();
+        if(httpStateCode != 200){
+            throw new HttpResponseException(httpStateCode, response.getEntity().toString());
+        }
+
+        HttpEntity entity = response.getEntity();
+
+        return EntityUtils.toString(entity);
     }
 }

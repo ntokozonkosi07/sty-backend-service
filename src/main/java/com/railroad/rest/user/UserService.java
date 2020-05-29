@@ -4,11 +4,15 @@ import com.railroad.entity.User;
 import com.railroad.rest.common.AbstractService;
 import com.railroad.rest.common.Repository;
 import com.railroad.rest.common.elasticsearch.ElasticsearchRepository;
+import lombok.var;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -45,6 +49,11 @@ public class UserService extends AbstractService  {
 	public User findUserById(@NotNull Long id) {
 		return query.findById(id);
 	}
+
+	public String searchUser(String query) throws IOException, NoSuchAlgorithmException, URISyntaxException {
+        var response = elasticSearchRepo.searchDocs(query);
+        return response;
+    }
 
 	public User updateUser(@NotNull User user) throws Exception {
         User _user = query.update(user);

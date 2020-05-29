@@ -4,6 +4,7 @@ import com.railroad.common.annotation.Log;
 import com.railroad.entity.User;
 import com.railroad.rest.exception.mappers.NoResultExceptionMapper;
 import com.railroad.security.Auth;
+import lombok.var;
 import org.apache.shiro.authc.credential.PasswordService;
 
 import javax.annotation.PostConstruct;
@@ -16,6 +17,9 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 
 @Log
@@ -58,10 +62,11 @@ public class UserRest {
     }
 
     @Auth
-    @Path("/{query}")  @POST
-    public Response searchUser(@NotNull @PathParam("query") String query) {
+    @Path("search")  @POST
+    public Response searchUser(@NotNull @QueryParam("query") String query) throws IOException, NoSuchAlgorithmException, URISyntaxException {
 //    	hook up elasticsearch here
-        return null;
+        var res = userService.searchUser(query);
+        return Response.ok(res).build();
     }
 
     @Auth

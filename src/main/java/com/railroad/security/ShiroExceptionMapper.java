@@ -42,6 +42,7 @@ public class ShiroExceptionMapper implements ExceptionMapper<Exception> {
                     .type(MediaType.TEXT_HTML)
                     .build();
         }
+        ex.printStackTrace();
         return Response.serverError().header(ShiroExceptionMapper.CAUSE, ex.getMessage()).build();
     }
 }
