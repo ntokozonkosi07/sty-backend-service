@@ -45,14 +45,14 @@ public class AuthRest {
 
         String token = generateToken(email);
 
-        return Response.ok().header(HttpHeaders.AUTHORIZATION, String.format("%s %s",SecurityUtil.BEARER, token)).build();
+        return Response.ok().header(HttpHeaders.AUTHORIZATION, String.format("%s", token)).build();
     }
 
     @POST
     @Path("/refresh")
     public Response refreshToken(){
         String token = generateToken(SecurityUtils.getSubject().toString());
-        return Response.ok().header(HttpHeaders.AUTHORIZATION, String.format("%s %s",SecurityUtil.BEARER, token)).build();
+        return Response.ok().header(HttpHeaders.AUTHORIZATION, String.format("%s", token)).build();
     }
 
     @GET
