@@ -276,21 +276,23 @@
 
         <!-- start of elasticsearch -->
         <dependency>
-            <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch</artifactId>
-            <version>${elasticsearch.version}</version>
-        </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.elasticsearch</groupId>-->
-<!--            <artifactId>elasticsearch-core</artifactId>-->
-<!--            <version>${elasticsearch.version}</version>-->
-<!--        </dependency>-->
-        <dependency>
             <groupId>org.elasticsearch.client</groupId>
             <artifactId>elasticsearch-rest-high-level-client</artifactId>
             <version>${elasticsearch.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-client </artifactId>
+            <version>${elasticsearch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>${elasticsearch.version}</version>
+        </dependency>
         <!-- end of elasticsearch -->
+
+
     </dependencies>
 
     <properties>
@@ -303,6 +305,6 @@
         <maven.surefire.version>2.22.0</maven.surefire.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
 
-        <elasticsearch.version>7.6.2</elasticsearch.version>
+        <elasticsearch.version>7.8.1</elasticsearch.version>
     </properties>
 </project>
