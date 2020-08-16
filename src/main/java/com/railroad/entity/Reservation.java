@@ -1,10 +1,6 @@
-package com.railroad.entity.reservation;
+package com.railroad.entity;
 
-import com.railroad.entity.*;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
@@ -49,7 +45,6 @@ public class Reservation extends AbstractEntity{
 
     @PrePersist
     public void init(){
-        this.setEndDateTime(LocalDateTime.of(2020,06,10,10,00,00));
         this.status = ReservationState.PENDING;
     }
 }

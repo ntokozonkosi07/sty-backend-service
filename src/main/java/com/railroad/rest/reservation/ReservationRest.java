@@ -2,13 +2,12 @@ package com.railroad.rest.reservation;
 
 import com.railroad.common.annotation.Log;
 import com.railroad.common.entityAdapters.EntityAdapter;
-import com.railroad.entity.reservation.Reservation;
-import com.railroad.entity.reservation.ReservationDto;
+import com.railroad.entity.Reservation;
+import com.railroad.entity.ReservationDto;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.json.Json;
-import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
@@ -53,7 +52,7 @@ public class ReservationRest {
                 JsonObject serviceProvided = Json.createObjectBuilder()
                         .add("id", obj.getServiceProvided().getId())
                         .add("name", obj.getServiceProvided().getName())
-                        .add("price", obj.getServiceProvided().getPrice())
+//                        .add("price", obj.getServiceProvided().getPrice())
                         .build();
 
                 JsonObject reservation = Json.createObjectBuilder()

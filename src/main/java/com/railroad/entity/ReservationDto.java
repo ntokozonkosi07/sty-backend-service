@@ -1,4 +1,4 @@
-package com.railroad.entity.reservation;
+package com.railroad.entity;
 
 import com.railroad.entity.ServiceProvided;
 import com.railroad.entity.User;
