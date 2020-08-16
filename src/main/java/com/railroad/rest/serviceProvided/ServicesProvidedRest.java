@@ -2,7 +2,6 @@ package com.railroad.rest.serviceProvided;
 
 import com.railroad.common.annotation.Log;
 import com.railroad.common.entityAdapters.EntityAdapter;
-import com.railroad.entity.AbstractEntity;
 import com.railroad.entity.ServiceProvided;
 import com.railroad.rest.requirement.RequirementService;
 import com.railroad.rest.user.UserService;
@@ -36,26 +35,26 @@ public class ServicesProvidedRest {
         jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new EntityAdapter<ServiceProvided>() {
             @Override
             public JsonObject adaptToJson(ServiceProvided obj) throws Exception {
-                ((ServiceProvided)obj).setRequirements(reqService.findRequirementsByServiceProvidedId(obj.getId(), 10, 0));
+//                ((ServiceProvided)obj).setRequirements(reqService.findRequirementsByServiceProvidedId(obj.getId(), 10, 0));
                 ((ServiceProvided)obj).setArtists(userService.findArtistByServiceProvidedId(obj.getId(),10, 0));
 
 
-                JsonArrayBuilder jsonReqArrBuilder = Json.createArrayBuilder();
-                ((ServiceProvided)obj).getRequirements().forEach(r -> {
-                    JsonArrayBuilder jsonServArr = Json.createArrayBuilder();
-
-                    JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder()
-                            .add("name", r.getName())
-                            .add("price", r.getPrice())
-                            .add("description", r.getDescription())
-                            .add("servicesProvided", jsonServArr);
-
-                    if(obj.getId() != null) jsonObjBuilder.add("id", obj.getId());
-
-                    JsonObject jsonObj = jsonObjBuilder.build();
-                    jsonReqArrBuilder.add(jsonObj);
-                });
-                JsonArray jsonReqArr = jsonReqArrBuilder.build();
+//                JsonArrayBuilder jsonReqArrBuilder = Json.createArrayBuilder();
+//                ((ServiceProvided)obj).getRequirements().forEach(r -> {
+//                    JsonArrayBuilder jsonServArr = Json.createArrayBuilder();
+//
+//                    JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder()
+//                            .add("name", r.getName())
+//                            .add("price", r.getPrice())
+//                            .add("description", r.getDescription());
+//                            .add("servicesProvided", jsonServArr);
+//
+//                    if(obj.getId() != null) jsonObjBuilder.add("id", obj.getId());
+//
+//                    JsonObject jsonObj = jsonObjBuilder.build();
+//                    jsonReqArrBuilder.add(jsonObj);
+//                });
+//                JsonArray jsonReqArr = jsonReqArrBuilder.build();
 
                 JsonArrayBuilder jsonArtArrBuilder = Json.createArrayBuilder();
                 ((ServiceProvided)obj).getArtists().forEach(a -> {
@@ -78,8 +77,8 @@ public class ServicesProvidedRest {
 
                 JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder().
                         add("name", ((ServiceProvided)obj).getName()).
-                        add("price", ((ServiceProvided)obj).getPrice()).
-                        add("requirements", jsonReqArr).
+//                        add("price", ((ServiceProvided)obj).getPrice()).
+//                        add("requirements", jsonReqArr).
                         add("artists", jsonArtArr);
 
                 if(obj.getId() != null){

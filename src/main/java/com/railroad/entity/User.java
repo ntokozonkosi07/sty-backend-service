@@ -1,6 +1,5 @@
 package com.railroad.entity;
 
-import com.railroad.entity.reservation.Reservation;
 import lombok.Data;
 
 import javax.json.bind.annotation.JsonbProperty;
@@ -14,9 +13,7 @@ import java.util.Collection;
 @NamedQuery(name=User.FIND_ALL_USERS, query = "select u from User u")
 @NamedQuery(name=User.FIND_USER_BY_ID, query = "select u from User u where u.Id = :id")
 @NamedQuery(name=User.FIND_USER_BY_EMAIL, query = "SELECT u FROM User u WHERE u.email = :email")
-@NamedQuery(name=User.FIND_USER_RATING_BY_ID, query = "SELECT r from User u INNER JOIN u.userRatings r WHERE u.Id = :id")
 @NamedQuery(name=User.FIND_USER_SERVICES_PROVIDED_BY_ID, query = "SELECT s from User u INNER JOIN u.servicesProvided s WHERE u.Id = :id")
-@NamedQuery(name=User.FIND_ROLE_BY_USER_ID, query = "SELECT ur from UserRole ur INNER JOIN ur.role r WHERE ur.id.userId = :id")
 @NamedQuery(name=User.FIND_ARTIST_BY_SERVICE_PROVIDED_ID, query = "SELECT u from User u INNER JOIN u.servicesProvided s WHERE s.Id = :id")
 public class User extends AbstractEntity {
 
@@ -51,10 +48,6 @@ public class User extends AbstractEntity {
     @JsonbProperty(nillable=true)
     private byte[] picture;
 
-    @OneToMany(mappedBy = "rater")
-    @JsonbProperty(nillable=true)
-    private Collection<UserRating> userRatings;
-
     @OneToMany(mappedBy = "artist")
     @JsonbProperty(nillable=true)
     private Collection<Reservation> reservations;
@@ -66,8 +59,4 @@ public class User extends AbstractEntity {
     )
     @JsonbProperty(nillable=true)
     private Collection<ServiceProvided> servicesProvided;
-
-    @OneToMany
-    @JsonbProperty(nillable=true)
-    private Collection<UserRole> userRoles;
 }

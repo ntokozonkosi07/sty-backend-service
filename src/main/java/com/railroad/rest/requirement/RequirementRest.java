@@ -2,7 +2,6 @@ package com.railroad.rest.requirement;
 
 import com.railroad.common.annotation.Log;
 import com.railroad.common.entityAdapters.EntityAdapter;
-import com.railroad.entity.AbstractEntity;
 import com.railroad.entity.Requirement;
 import com.railroad.entity.ServiceProvided;
 import com.railroad.rest.serviceProvided.ServiceProvidedService;
@@ -19,9 +18,7 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.ws.Service;
 import java.util.Collection;
-import java.util.Optional;
 
 @Log
 @Path("/requirement")
@@ -48,7 +45,7 @@ public class RequirementRest {
                     servicesProvidedBuilder.add(Json.createObjectBuilder()
                     .add("id", s.getId())
                     .add("name", s.getName())
-                    .add("price", s.getPrice())
+//                    .add("price", s.getPrice())
                     .build());
                 });
                 JsonArray servicesProvidedArr = servicesProvidedBuilder.build();

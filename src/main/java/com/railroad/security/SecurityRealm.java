@@ -68,14 +68,14 @@ public class SecurityRealm extends AuthorizingRealm {
         Set<String> roleNames = new HashSet<>();
 
 
-        try{
-            this.userService.findUserByEmail(username)
-                    .getUserRoles()
-                    .stream()
-                    .forEach(x -> roleNames.add(x.getRole().getName()));
-        } catch (NoSuchFieldException ex){
-            throw new AuthorizationException("Cannot find user roles");
-        }
+//        try{
+//            this.userService.findUserByEmail(username)
+//                    .getUserRoles()
+//                    .stream()
+//                    .forEach(x -> roleNames.add(x.getRole().getName()));
+//        } catch (NoSuchFieldException ex){
+//            throw new AuthorizationException("Cannot find user roles");
+//        }
 
         AuthorizationInfo info = new SimpleAuthorizationInfo(roleNames);
 

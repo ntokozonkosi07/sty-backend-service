@@ -1,6 +1,6 @@
 package com.railroad.rest.reservation;
 
-import com.railroad.entity.reservation.Reservation;
+import com.railroad.entity.Reservation;
 import com.railroad.rest.common.Repository;
 
 import javax.transaction.Transactional;
@@ -21,7 +21,7 @@ public class ReservationQuery extends Repository<Reservation> {
 
     @Override
     public Reservation findById(Long id) {
-        return this.getSingleResultByNamedQuery(new HashMap<String, Object>() {{ put("id", Long.valueOf(id)); }},Reservation.FIND_RESERVATION_BY_ID);
+    return this.getSingleResultByNamedQuery(new HashMap<String, Object>() {{ put("id", Long.valueOf(id)); }},Reservation.FIND_RESERVATION_BY_ID);
     }
 
     public Collection<Reservation> findtReservationsByArtistId(Long id, int maxResults, int firstResults){

@@ -1,4 +1,4 @@
-package com.railroad.entity.reservation;
+package com.railroad.entity;
 
 public enum ReservationState {
     PENDING,
