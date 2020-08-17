@@ -7,8 +7,8 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 
 @Transactional
-public class ColorQuery extends Repository<Colour> {
-    public ColorQuery(Class<Colour> type) {
+public class ColourQuery extends Repository<Colour> {
+    public ColourQuery() {
         super(Colour.class);
     }
 

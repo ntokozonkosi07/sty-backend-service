@@ -7,9 +7,10 @@ import javax.inject.Inject;
 import java.util.Collection;
 
 @Stateless
-public class ColorService {
+public class ColourService {
+
     @Inject
-    private ColorQuery query;
+    ColourQuery query;
 
     public Collection<Colour> findAll(int maxResults, int firstResults){
         return query.findAll(maxResults, firstResults);

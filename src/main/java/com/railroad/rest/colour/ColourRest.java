@@ -12,9 +12,9 @@ import java.util.Collection;
 @Path("/ref-colours")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class ColorRest {
+public class ColourRest {
     @Inject
-    private ColorService cservice;
+    private ColourService cservice;
 
     @Path("/") @GET
     public Response findAll(
